@@ -8,8 +8,12 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+    onFileAdd: (file) => {
+        let reader = new FileReader()
+        reader.onload = (ev) => dispatch(addFile(file.name, ev.target.result))
+        reader.readAsDataURL(file)
+    },
     onFileDelete: (id) => dispatch(removeFile(id)),
-    onFileAdd: (filename) => dispatch(addFile(filename)),
 })
 
 const UploadContainer = connect(

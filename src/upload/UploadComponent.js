@@ -9,7 +9,6 @@ import Paper from 'material-ui/Paper'
 
 import AddIcon from 'material-ui-icons/Add'
 import DeleteIcon from 'material-ui-icons/Delete'
-import PhotoIcon from 'material-ui-icons/Photo'
 
 const styles = (theme) => ({
     paper: {
@@ -29,17 +28,18 @@ const styles = (theme) => ({
 const UploadComponent = ({ classes, files, onFileAdd, onFileDelete }) => (
     <Paper elevation={2} className={classes.paper}>
     <List dense>
-    {files.map(file => (
-        <ListItem key={file.id}>
-            <Avatar><PhotoIcon/></Avatar>
+    {files.map(file => {
+        let deleteFile = () => onFileDelete(file.id)
+        return <ListItem key={file.id}>
+            <Avatar src={file.data}/>
             <ListItemText primary={file.filename}/>
             <ListItemSecondaryAction>
-                <IconButton aria-label="Delete" onClick={() => onFileDelete(file.id)}>
+                <IconButton aria-label="delete" onClick={deleteFile}>
                     <DeleteIcon />
                 </IconButton>
             </ListItemSecondaryAction>
         </ListItem>
-    ))}
+    })}
     </List>
     <Button
         fab
@@ -51,7 +51,7 @@ const UploadComponent = ({ classes, files, onFileAdd, onFileDelete }) => (
     >
         <AddIcon/>
         <input
-            onChange={e => Array.from(e.target.files).map(f => onFileAdd(f.name))}
+            onChange={e => Array.from(e.target.files).map(f => onFileAdd(f))}
             className={classes.input}
             id='photoinput'
             name='photoinput'
