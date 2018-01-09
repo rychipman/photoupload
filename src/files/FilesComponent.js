@@ -24,7 +24,7 @@ const styles = (theme) => ({
 const FilesComponent = ({ classes, files, notifications, onNotificationClose }) => (
     <Paper elevation={2} className={classes.paper}>
     <List dense>
-    {files.filter(f => f.uploaded).map(file => {
+    {files.filter(f => f.uploadState === 'uploaded').map(file => {
         return <ListItem key={file.id}>
             <Avatar src={file.uri}/>
             <ListItemText primary={file.filename}/>
