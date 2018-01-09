@@ -44,7 +44,7 @@ export const uploadApp = (state=initialState, action) => {
             })
         case CLOSE_NOTIFICATION:
             return Object.assign({}, state, {
-                files: state.notifications.map((n) => {
+                notifications: state.notifications.map((n) => {
                     if (n.id === action.id) {
                         n.open = false
                     }
