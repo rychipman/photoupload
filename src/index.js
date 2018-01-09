@@ -9,7 +9,7 @@ import Reboot from 'material-ui/Reboot'
 import 'typeface-roboto'
 
 import AppLayout from './layouts/AppLayout'
-import AppContent from './containers/AppContent'
+import Upload from './upload'
 
 let store = createStore(uploadApp)
 
@@ -18,7 +18,7 @@ const App = () => (
         <div>
             <Reboot/>
             <AppLayout>
-                <AppContent/>
+                <Upload/>
             </AppLayout>
         </div>
     </Provider>
