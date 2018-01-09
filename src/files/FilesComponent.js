@@ -1,8 +1,7 @@
 import React from 'react'
 
 import { withStyles } from 'material-ui/styles'
-import Avatar from 'material-ui/Avatar'
-import List, { ListItem, ListItemText } from 'material-ui/List'
+import GridList, { GridListTile } from 'material-ui/GridList'
 import Paper from 'material-ui/Paper'
 import Snackbar from 'material-ui/Snackbar'
 
@@ -23,14 +22,13 @@ const styles = (theme) => ({
 
 const FilesComponent = ({ classes, files, notifications, onNotificationClose }) => (
     <Paper elevation={2} className={classes.paper}>
-    <List dense>
+    <GridList cellHeight={160} cols={3}>
     {files.filter(f => f.uploadState === 'uploaded').map(file => {
-        return <ListItem key={file.id}>
-            <Avatar src={file.uri}/>
-            <ListItemText primary={file.filename}/>
-        </ListItem>
+        return <GridListTile key={file.id} cols={1}>
+            <img src={file.uri} alt={file.filename}/>
+        </GridListTile>
     })}
-    </List>
+    </GridList>
     {notifications.map(note => (
         <Snackbar
             key={note.id}
