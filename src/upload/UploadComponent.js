@@ -36,7 +36,7 @@ const UploadComponent = ({ classes, files, onFileAdd, onFileDelete }) => (
     {files.map(file => {
         let deleteFile = () => onFileDelete(file.id)
         return <ListItem key={file.id}>
-            <Avatar src={file.data}/>
+            <Avatar src={file.imageData}/>
             <ListItemText primary={file.filename}/>
             <ListItemSecondaryAction>
                 <IconButton aria-label="delete" onClick={deleteFile}>

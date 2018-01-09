@@ -1,5 +1,6 @@
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
 import { uploadApp } from './reducers/'
 
 import React from 'react'
@@ -11,7 +12,10 @@ import 'typeface-roboto'
 import AppLayout from './layouts/AppLayout'
 import Upload from './upload'
 
-let store = createStore(uploadApp)
+let store = createStore(
+    uploadApp,
+    applyMiddleware(thunk),
+)
 
 const App = () => (
     <Provider store={store}>
