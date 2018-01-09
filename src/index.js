@@ -6,12 +6,14 @@ import { uploadApp } from './reducers/'
 
 import React from 'react'
 import { render } from 'react-dom'
+import { Route, BrowserRouter as Router } from 'react-router-dom'
 import Reboot from 'material-ui/Reboot'
 
 import 'typeface-roboto'
 
 import AppLayout from './layouts/AppLayout'
 import Upload from './upload'
+import Files from './files'
 
 const initialState = {
     files: [],
@@ -32,9 +34,12 @@ const App = () => (
     <Provider store={store}>
         <div>
             <Reboot/>
+            <Router>
             <AppLayout>
-                <Upload/>
+                <Route path='/upload' component={Upload}/>
+                <Route path='/files' component={Files}/>
             </AppLayout>
+            </Router>
         </div>
     </Provider>
 )

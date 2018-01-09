@@ -31,7 +31,7 @@ const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload, no
     <Paper elevation={2} className={classes.paper}>
     <List dense>
     <ListItem key='header' button onClick={() => files.map(f => onUpload(f.id, f.data))}>
-        <ListItemText primary={files.length + ' files to be uploaded'}/>
+        <ListItemText primary={files.filter(f => !f.uploaded).length + ' files to be uploaded'}/>
     </ListItem>
     <Divider/>
     {files.filter(f => !f.uploaded).map(file => {

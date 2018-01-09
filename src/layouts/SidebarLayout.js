@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { withStyles } from 'material-ui/styles'
 import Divider from 'material-ui/Divider'
@@ -29,14 +30,18 @@ const styles = (theme) => ({
 
 const PrimaryList = () => (
     <List>
-        <ListItem button>
-        <ListItemIcon><CloudUploadIcon/></ListItemIcon>
-        <ListItemText primary='Add Photos'/>
-        </ListItem>
-        <ListItem button>
-        <ListItemIcon><PhotoLibraryIcon/></ListItemIcon>
-        <ListItemText primary='View Photos'/>
-        </ListItem>
+        <Link to='/upload'>
+            <ListItem button>
+            <ListItemIcon><CloudUploadIcon/></ListItemIcon>
+            <ListItemText primary='Add Photos'/>
+            </ListItem>
+        </Link>
+        <Link to='/files'>
+            <ListItem button>
+            <ListItemIcon><PhotoLibraryIcon/></ListItemIcon>
+            <ListItemText primary='Uploaded Photos'/>
+            </ListItem>
+        </Link>
     </List>
 )
 
