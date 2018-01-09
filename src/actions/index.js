@@ -1,5 +1,4 @@
 export const ADD_FILE = 'ADD_FILE'
-export const ADD_IMAGE_FILE_DATA = 'ADD_IMAGE_FILE_DATA'
 export const REMOVE_FILE = 'REMOVE_FILE'
 export const SET_FILE_DATA = 'SET_FILE_DATA'
 export const SET_FILE_UPLOADED = 'SET_FILE_UPLOADED'
@@ -21,17 +20,6 @@ export const addImageFile = (file) => (
     (dispatch) => {
         const id = nextFileId++
         dispatch(addFile(id, file.name, file))
-        let reader = new FileReader()
-        reader.onload = (ev) => dispatch(addImageFileData(id, ev.target.result))
-        reader.readAsDataURL(file)
-    }
-)
-
-export const addImageFileData = (id, imageDataURI) => (
-    {
-        type: ADD_IMAGE_FILE_DATA,
-        id,
-        imageDataURI,
     }
 )
 
@@ -42,30 +30,32 @@ export const removeFile = (id) => (
     }
 )
 
+export const uploadFiles = (files) => (
+    (dispatch) => {
+        console.log('here')
+        files.reduce((cur, next) => (
+            cur.then(() => {
+                const file = next
+                const formData = new FormData()
+                formData.append('file', file.data)
+                dispatch(setFileUploadingState(file.id, 'uploading'))
+                return fetch('http://localhost:8080/upload', {
+                    method: 'POST',
+                    headers:{ },
+                    body: formData,
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    dispatch(setFileUploaded(file.id, data.Message))
+                })
+            })
+        ), Promise.resolve(''))
+    }
+)
+
 export const uploadFile = (id, file) => (
     (dispatch) => {
-        const formData = new FormData()
-        formData.append('file', file)
-        dispatch(setFileUploadingState(id, 'uploading'))
-        fetch('http://localhost:8080/upload', {
-            method: 'POST',
-            headers:{ },
-            body: formData,
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-            if (data.Success) {
-                dispatch(setFileUploaded(id, data.Message))
-            } else {
-                dispatch(createNotification('file upload failed'))
-                dispatch(setFileUploadingState(id, ''))
-            }
-        })
-            .catch(() => {
-                dispatch(createNotification('could not complete upload request'))
-                dispatch(setFileUploadingState(id, ''))
-            })
     }
 )
 

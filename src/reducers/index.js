@@ -1,4 +1,4 @@
-import { ADD_FILE, REMOVE_FILE, ADD_IMAGE_FILE_DATA, SET_FILE_UPLOADED, SET_FILE_UPLOADING_STATE, CREATE_NOTIFICATION, CLOSE_NOTIFICATION } from '../actions';
+import { ADD_FILE, REMOVE_FILE, SET_FILE_UPLOADED, SET_FILE_UPLOADING_STATE, CREATE_NOTIFICATION, CLOSE_NOTIFICATION } from '../actions';
 
 const initialState = {
     files: [],
@@ -15,22 +15,14 @@ export const uploadApp = (state=initialState, action) => {
                         id: action.id,
                         filename: action.filename,
                         data: action.data,
-                        uploadState: "",
+                        uri: '',
+                        uploadState: '',
                     }
                 ]
             })
         case REMOVE_FILE:
             return Object.assign({}, state, {
                 files: state.files.filter(file => file.id !== action.id)
-            })
-        case ADD_IMAGE_FILE_DATA:
-            return Object.assign({}, state, {
-                files: state.files.map(file => {
-                    if (file.id === action.id) {
-                        file.uri = action.imageDataURI
-                    }
-                    return file
-                })
             })
         case SET_FILE_UPLOADING_STATE:
             return Object.assign({}, state, {

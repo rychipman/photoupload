@@ -31,7 +31,7 @@ const styles = (theme) => ({
 const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload, notifications, onNotificationClose }) => (
     <Paper elevation={2} className={classes.paper}>
     <List dense>
-    <ListItem key='header' button onClick={() => files.filter(f => f.uploadState === '').map(f => onUpload(f.id, f.data))}>
+    <ListItem key='header' button onClick={() => onUpload(files.filter(f => f.uploadState === ''))}>
         <ListItemText primary={files.filter(f => f.uploadState !== 'uploaded').length + ' files to be uploaded'}/>
     </ListItem>
     <Divider/>
@@ -44,7 +44,7 @@ const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload, no
             secondary = <CircularProgress/>
         }
         return <ListItem key={file.id}>
-            <Avatar src={file.uri}/>
+            <Avatar>{file.filename.slice(0, 1)}</Avatar>
             <ListItemText primary={file.filename}/>
             <ListItemSecondaryAction>
                 {secondary}
