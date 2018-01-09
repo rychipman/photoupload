@@ -3,6 +3,7 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import Avatar from 'material-ui/Avatar'
 import Button from 'material-ui/Button'
+import Divider from 'material-ui/Divider'
 import IconButton from 'material-ui/IconButton'
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import Paper from 'material-ui/Paper'
@@ -28,6 +29,10 @@ const styles = (theme) => ({
 const UploadComponent = ({ classes, files, onFileAdd, onFileDelete }) => (
     <Paper elevation={2} className={classes.paper}>
     <List dense>
+    <ListItem key='header'>
+        <ListItemText primary={files.length + ' files to be uploaded'}/>
+    </ListItem>
+    <Divider/>
     {files.map(file => {
         let deleteFile = () => onFileDelete(file.id)
         return <ListItem key={file.id}>
