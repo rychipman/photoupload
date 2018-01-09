@@ -1,8 +1,9 @@
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { uploadApp } from './reducers/'
+import createSagaMiddleware from 'redux-saga'
+import rootReducer from './reducers/'
+
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -14,21 +15,23 @@ import 'typeface-roboto'
 import AppLayout from './layouts/AppLayout'
 import Upload from './upload'
 import Files from './files'
+import defaultSaga from './sagas'
 
 const initialState = {
     files: [],
     notifications: [],
 }
 
-const middleware = [
-    thunk,
-]
+const saga = createSagaMiddleware()
+const middleware = [ saga ]
 
 let store = createStore(
-    uploadApp,
+    rootReducer,
     initialState,
     composeWithDevTools(applyMiddleware(...middleware)),
 )
+
+saga.run(defaultSaga)
 
 const App = () => (
     <Provider store={store}>

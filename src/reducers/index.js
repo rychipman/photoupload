@@ -1,11 +1,11 @@
-import { ADD_FILE, REMOVE_FILE, SET_FILE_UPLOADED, SET_FILE_UPLOADING_STATE, CREATE_NOTIFICATION, CLOSE_NOTIFICATION } from '../actions';
+import { ADD_FILE, REMOVE_FILE, SET_FILE_UPLOADING_STATE, FILE_UPLOADED, CREATE_NOTIFICATION, CLOSE_NOTIFICATION } from '../actions';
 
 const initialState = {
     files: [],
     notifications: [],
 }
 
-export const uploadApp = (state=initialState, action) => {
+const uploadApp = (state=initialState, action) => {
     switch (action.type) {
         case ADD_FILE:
             return Object.assign({}, state, {
@@ -24,21 +24,21 @@ export const uploadApp = (state=initialState, action) => {
             return Object.assign({}, state, {
                 files: state.files.filter(file => file.id !== action.id)
             })
+        case FILE_UPLOADED:
+            return Object.assign({}, state, {
+                files: state.files.map(file => {
+                    if (file.id === action.id) {
+                        file.uploadState = 'uploaded'
+                        file.uri = action.uri
+                    }
+                    return file
+                })
+            })
         case SET_FILE_UPLOADING_STATE:
             return Object.assign({}, state, {
                 files: state.files.map(file => {
                     if (file.id === action.id) {
                         file.uploadState = action.state
-                    }
-                    return file
-                })
-            })
-        case SET_FILE_UPLOADED:
-            return Object.assign({}, state, {
-                files: state.files.map(file => {
-                    if (file.id === action.id) {
-                        file.uri = action.url
-                        file.uploadState = "uploaded"
                     }
                     return file
                 })
@@ -67,3 +67,5 @@ export const uploadApp = (state=initialState, action) => {
             return state
     }
 }
+
+export default uploadApp
