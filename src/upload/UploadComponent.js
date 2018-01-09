@@ -26,17 +26,17 @@ const styles = (theme) => ({
     },
 })
 
-const UploadComponent = ({ classes, files, onFileAdd, onFileDelete }) => (
+const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload }) => (
     <Paper elevation={2} className={classes.paper}>
     <List dense>
-    <ListItem key='header'>
+    <ListItem key='header' button onClick={() => files.map(f => onUpload(f.data))}>
         <ListItemText primary={files.length + ' files to be uploaded'}/>
     </ListItem>
     <Divider/>
     {files.map(file => {
         let deleteFile = () => onFileDelete(file.id)
         return <ListItem key={file.id}>
-            <Avatar src={file.imageData}/>
+            <Avatar src={file.imageDataURI}/>
             <ListItemText primary={file.filename}/>
             <ListItemSecondaryAction>
                 <IconButton aria-label="delete" onClick={deleteFile}>

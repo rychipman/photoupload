@@ -13,6 +13,7 @@ export const uploadApp = (state=initialState, action) => {
                     {
                         id: action.id,
                         filename: action.filename,
+                        data: action.data,
                     }
                 ]
             })
@@ -24,7 +25,7 @@ export const uploadApp = (state=initialState, action) => {
             return Object.assign({}, state, {
                 files: state.files.map((file) => {
                     if (file.id === action.id) {
-                        file.imageData = action.imageData
+                        file.imageDataURI = action.imageDataURI
                     }
                     return file
                 })

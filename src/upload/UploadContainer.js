@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import { addImageFile, removeFile } from '../actions'
+import { addImageFile, removeFile, uploadFile } from '../actions'
 import UploadComponent from './UploadComponent.js'
 
 const mapStateToProps = (state) => ({
@@ -10,6 +10,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     onFileAdd: (file) => dispatch(addImageFile(file)),
     onFileDelete: (id) => dispatch(removeFile(id)),
+    onUpload: (file) => dispatch(uploadFile(file)),
 })
 
 const UploadContainer = connect(
