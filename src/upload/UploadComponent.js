@@ -7,6 +7,7 @@ import Divider from 'material-ui/Divider'
 import IconButton from 'material-ui/IconButton'
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import Paper from 'material-ui/Paper'
+import Snackbar from 'material-ui/Snackbar'
 
 import AddIcon from 'material-ui-icons/Add'
 import DeleteIcon from 'material-ui-icons/Delete'
@@ -26,7 +27,7 @@ const styles = (theme) => ({
     },
 })
 
-const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload }) => (
+const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload, notifications, onNotificationClose }) => (
     <Paper elevation={2} className={classes.paper}>
     <List dense>
     <ListItem key='header' button onClick={() => files.map(f => onUpload(f.data))}>
@@ -65,6 +66,19 @@ const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload }) 
             multiple
         />
     </Button>
+    {notifications.map(note => (
+        <Snackbar
+            key={note.id}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}
+            open={note.open}
+            message={note.text}
+            autoHideDuration={5000}
+            onClose={() => onNotificationClose(note.id)}
+        />
+    ))}
     </Paper>
 )
 

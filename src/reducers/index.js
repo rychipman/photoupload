@@ -1,7 +1,8 @@
-import { ADD_FILE, REMOVE_FILE, ADD_IMAGE_FILE_DATA } from '../actions';
+import { ADD_FILE, REMOVE_FILE, ADD_IMAGE_FILE_DATA, CREATE_NOTIFICATION, CLOSE_NOTIFICATION } from '../actions';
 
 const initialState = {
-    files: []
+    files: [],
+    notifications: [],
 }
 
 export const uploadApp = (state=initialState, action) => {
@@ -28,6 +29,26 @@ export const uploadApp = (state=initialState, action) => {
                         file.imageDataURI = action.imageDataURI
                     }
                     return file
+                })
+            })
+        case CREATE_NOTIFICATION:
+            return Object.assign({}, state, {
+                notifications: [
+                    ...state.notifications,
+                    {
+                        id: action.id,
+                        text: action.text,
+                        open: true,
+                    },
+                ],
+            })
+        case CLOSE_NOTIFICATION:
+            return Object.assign({}, state, {
+                files: state.notifications.map((n) => {
+                    if (n.id === action.id) {
+                        n.open = false
+                    }
+                    return n
                 })
             })
         default:
