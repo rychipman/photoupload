@@ -1,17 +1,16 @@
+export const ADD_FILE = 'ADD_FILE'
+export const REMOVE_FILE = 'REMOVE_FILE'
 
-export const ADD_TASK = 'ADD_TASK'
-export const REMOVE_TASK = 'REMOVE_TASK'
-
-export const addTask = text => (
+export const addFile = (filename) => (
     {
-        type: ADD_TASK,
-        text
+        type: ADD_FILE,
+        filename
     }
 )
 
-export const removeTask = id => (
+export const removeFile = (id) => (
     {
-        type: REMOVE_TASK,
+        type: REMOVE_FILE,
         id
     }
 )

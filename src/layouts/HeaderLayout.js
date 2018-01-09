@@ -16,7 +16,7 @@ let Header = ({classes}) => (
     <div>
         <AppBar position='static'>
             <Toolbar>
-                <Typography type="title" color="inherit">Vintage</Typography>
+                <Typography type="title" color="inherit">Photo Uploader</Typography>
             </Toolbar>
         </AppBar>
     </div>

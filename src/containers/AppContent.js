@@ -1,21 +1,10 @@
 import React from 'react'
 
-import Paper from 'material-ui/Paper'
+import SelectedFiles from './SelectedFiles'
 
-import AddTask from './AddTask'
-import VisibleTaskList from './VisibleTaskList'
-
-
-
-let AppContent = ({classes}) => (
+const AppContent = ({classes}) => (
     <div>
-        <Paper elevation='4'>
-            <AddTask/>
-        </Paper>
-
-        <Paper elevation='4'>
-            <VisibleTaskList/>
-        </Paper>
+        <SelectedFiles/>
     </div>
 )
 

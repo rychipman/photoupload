@@ -5,7 +5,9 @@ import Divider from 'material-ui/Divider'
 import Drawer from 'material-ui/Drawer'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
 
-import InboxIcon from 'material-ui-icons/Inbox'
+import CloudUploadIcon from 'material-ui-icons/CloudUpload'
+import FolderIcon from 'material-ui-icons/Folder'
+import PhotoLibraryIcon from 'material-ui-icons/PhotoLibrary'
 
 const drawerWidth = 240;
 const styles = (theme) => ({
@@ -28,12 +30,12 @@ const styles = (theme) => ({
 const PrimaryList = () => (
     <List>
         <ListItem button>
-        <ListItemIcon><InboxIcon/></ListItemIcon>
-        <ListItemText primary='Inbox'/>
+        <ListItemIcon><CloudUploadIcon/></ListItemIcon>
+        <ListItemText primary='Add Photos'/>
         </ListItem>
         <ListItem button>
-        <ListItemIcon><InboxIcon/></ListItemIcon>
-        <ListItemText primary='Outbox'/>
+        <ListItemIcon><PhotoLibraryIcon/></ListItemIcon>
+        <ListItemText primary='View Photos'/>
         </ListItem>
     </List>
 )
@@ -41,12 +43,12 @@ const PrimaryList = () => (
 const SecondaryList = () => (
     <List>
         <ListItem button>
-        <ListItemIcon><InboxIcon/></ListItemIcon>
-        <ListItemText primary='Project One'/>
+        <ListItemIcon><FolderIcon/></ListItemIcon>
+        <ListItemText primary='Thing One'/>
         </ListItem>
         <ListItem button>
-        <ListItemIcon><InboxIcon/></ListItemIcon>
-        <ListItemText primary='Project Two'/>
+        <ListItemIcon><FolderIcon/></ListItemIcon>
+        <ListItemText primary='Thing Two'/>
         </ListItem>
     </List>
 )

@@ -1,40 +1,40 @@
-import { ADD_TASK, REMOVE_TASK } from '../actions';
+import { ADD_FILE, REMOVE_FILE } from '../actions';
 
 const initialState = {
-    last_id: 3,
-    tasks: [
+    files: [
         {
-            text: 'this is an example task',
-            id: 1,
+            id: -1,
+            filename: '20150101_123523049_000.jpg',
         },
         {
-            text: 'add my own task',
-            id: 2,
+            id: -2,
+            filename: '20150101_123523049_000.jpg',
         },
         {
-            text: 'delete this task',
-            id: 3,
+            id: -3,
+            filename: '20150101_123523049_000.jpg',
         }
     ]
 }
 
-export const todoApp = (state=initialState, action) => {
+let last_id = 0
+
+export const uploadApp = (state=initialState, action) => {
     switch (action.type) {
-        case ADD_TASK:
-            let id = state.last_id + 1;
+        case ADD_FILE:
+            last_id += 1;
             return Object.assign({}, state, {
-                last_id: id,
-                tasks: [
-                    ...state.tasks,
+                files: [
+                    ...state.files,
                     {
-                        text: action.text,
-                        id: id
+                        id: last_id,
+                        filename: action.filename,
                     }
                 ]
             })
-        case REMOVE_TASK:
+        case REMOVE_FILE:
             return Object.assign({}, state, {
-                tasks: state.tasks.filter((task) => task.id !== action.id)
+                files: state.files.filter((file) => file.id !== action.id)
             })
         default:
             return state

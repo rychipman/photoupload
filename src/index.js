@@ -1,6 +1,6 @@
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import { todoApp } from './reducers/'
+import { uploadApp } from './reducers/'
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -11,7 +11,7 @@ import 'typeface-roboto'
 import AppLayout from './layouts/AppLayout'
 import AppContent from './containers/AppContent'
 
-let store = createStore(todoApp)
+let store = createStore(uploadApp)
 
 const App = () => (
     <Provider store={store}>
