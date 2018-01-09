@@ -1,4 +1,4 @@
-import { ADD_FILE, REMOVE_FILE, ADD_IMAGE_FILE_DATA, CREATE_NOTIFICATION, CLOSE_NOTIFICATION } from '../actions';
+import { ADD_FILE, REMOVE_FILE, ADD_IMAGE_FILE_DATA, SET_FILE_UPLOADED, CREATE_NOTIFICATION, CLOSE_NOTIFICATION } from '../actions';
 
 const initialState = {
     files: [],
@@ -15,18 +15,29 @@ export const uploadApp = (state=initialState, action) => {
                         id: action.id,
                         filename: action.filename,
                         data: action.data,
+                        uploaded: false,
                     }
                 ]
             })
         case REMOVE_FILE:
             return Object.assign({}, state, {
-                files: state.files.filter((file) => file.id !== action.id)
+                files: state.files.filter(file => file.id !== action.id)
             })
         case ADD_IMAGE_FILE_DATA:
             return Object.assign({}, state, {
-                files: state.files.map((file) => {
+                files: state.files.map(file => {
                     if (file.id === action.id) {
-                        file.imageDataURI = action.imageDataURI
+                        file.uri = action.imageDataURI
+                    }
+                    return file
+                })
+            })
+        case SET_FILE_UPLOADED:
+            return Object.assign({}, state, {
+                files: state.files.map(file => {
+                    if (file.id === action.id) {
+                        file.uri = action.url
+                        file.uploaded = true
                     }
                     return file
                 })
@@ -44,7 +55,7 @@ export const uploadApp = (state=initialState, action) => {
             })
         case CLOSE_NOTIFICATION:
             return Object.assign({}, state, {
-                notifications: state.notifications.map((n) => {
+                notifications: state.notifications.map(n => {
                     if (n.id === action.id) {
                         n.open = false
                     }

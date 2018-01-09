@@ -2,6 +2,7 @@ export const ADD_FILE = 'ADD_FILE'
 export const ADD_IMAGE_FILE_DATA = 'ADD_IMAGE_FILE_DATA'
 export const REMOVE_FILE = 'REMOVE_FILE'
 export const SET_FILE_DATA = 'SET_FILE_DATA'
+export const SET_FILE_UPLOADED = 'SET_FILE_UPLOADED'
 export const CREATE_NOTIFICATION = 'CREATE_NOTIFICATION'
 export const CLOSE_NOTIFICATION = 'CLOSE_NOTIFICATION'
 
@@ -40,7 +41,7 @@ export const removeFile = (id) => (
     }
 )
 
-export const uploadFile = (file) => (
+export const uploadFile = (id, file) => (
     (dispatch) => {
         const formData = new FormData()
         formData.append('file', file)
@@ -53,12 +54,21 @@ export const uploadFile = (file) => (
         .then(data => {
             console.log(data)
             if (data.Success) {
+                dispatch(setFileUploaded(id, data.Message))
                 dispatch(createNotification('file upload succeeded'))
             } else {
                 dispatch(createNotification('file upload failed'))
             }
         })
         .catch(() => dispatch(createNotification('could not complete upload request')))
+    }
+)
+
+const setFileUploaded = (id, url) => (
+    {
+        type: SET_FILE_UPLOADED,
+        id,
+        url,
     }
 )
 

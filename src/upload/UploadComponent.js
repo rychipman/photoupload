@@ -30,14 +30,14 @@ const styles = (theme) => ({
 const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload, notifications, onNotificationClose }) => (
     <Paper elevation={2} className={classes.paper}>
     <List dense>
-    <ListItem key='header' button onClick={() => files.map(f => onUpload(f.data))}>
+    <ListItem key='header' button onClick={() => files.map(f => onUpload(f.id, f.data))}>
         <ListItemText primary={files.length + ' files to be uploaded'}/>
     </ListItem>
     <Divider/>
-    {files.map(file => {
+    {files.filter(f => !f.uploaded).map(file => {
         let deleteFile = () => onFileDelete(file.id)
         return <ListItem key={file.id}>
-            <Avatar src={file.imageDataURI}/>
+            <Avatar src={file.uri}/>
             <ListItemText primary={file.filename}/>
             <ListItemSecondaryAction>
                 <IconButton aria-label="delete" onClick={deleteFile}>
@@ -75,7 +75,7 @@ const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload, no
             }}
             open={note.open}
             message={note.text}
-            autoHideDuration={5000}
+            autoHideDuration={1500}
             onClose={() => onNotificationClose(note.id)}
         />
     ))}

@@ -11,7 +11,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     onFileAdd: (file) => dispatch(addImageFile(file)),
     onFileDelete: (id) => dispatch(removeFile(id)),
-    onUpload: (file) => dispatch(uploadFile(file)),
+    onUpload: (id, file) => dispatch(uploadFile(id, file)),
     onNotificationClose: (id) => dispatch(closeNotification(id)),
 })
 
