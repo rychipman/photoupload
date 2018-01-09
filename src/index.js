@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import { uploadApp } from './reducers/'
 
 import React from 'react'
@@ -12,9 +13,19 @@ import 'typeface-roboto'
 import AppLayout from './layouts/AppLayout'
 import Upload from './upload'
 
+const initialState = {
+    files: [],
+    notifications: [],
+}
+
+const middleware = [
+    thunk,
+]
+
 let store = createStore(
     uploadApp,
-    applyMiddleware(thunk),
+    initialState,
+    composeWithDevTools(applyMiddleware(...middleware)),
 )
 
 const App = () => (
