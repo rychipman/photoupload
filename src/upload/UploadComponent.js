@@ -31,7 +31,7 @@ const styles = (theme) => ({
 const UploadComponent = ({ classes, files, onFileAdd, onFileDelete, onUpload, notifications, onNotificationClose }) => (
     <Paper elevation={2} className={classes.paper}>
     <List dense>
-    <ListItem key='header' button onClick={() => files.map(f => onUpload(f.id, f.data))}>
+    <ListItem key='header' button onClick={() => files.filter(f => f.uploadState === '').map(f => onUpload(f.id, f.data))}>
         <ListItemText primary={files.filter(f => f.uploadState !== 'uploaded').length + ' files to be uploaded'}/>
     </ListItem>
     <Divider/>

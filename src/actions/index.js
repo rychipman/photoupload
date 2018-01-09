@@ -57,9 +57,9 @@ export const uploadFile = (id, file) => (
             console.log(data)
             if (data.Success) {
                 dispatch(setFileUploaded(id, data.Message))
-                dispatch(createNotification('file upload succeeded'))
             } else {
                 dispatch(createNotification('file upload failed'))
+                dispatch(setFileUploadingState(id, ''))
             }
         })
             .catch(() => {
