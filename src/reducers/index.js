@@ -17,6 +17,7 @@ const uploadApp = (state=initialState, action) => {
                         data: action.data,
                         uri: '',
                         uploadState: '',
+                        staged: false,
                     }
                 ]
             })
@@ -30,6 +31,7 @@ const uploadApp = (state=initialState, action) => {
                     if (file.id === action.id) {
                         file.uploadState = 'uploaded'
                         file.uri = action.uri
+                        file.staged = true
                     }
                     return file
                 })
