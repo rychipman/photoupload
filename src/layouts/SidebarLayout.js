@@ -7,7 +7,8 @@ import Drawer from 'material-ui/Drawer'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
 
 import CloudUploadIcon from 'material-ui-icons/CloudUpload'
-import FolderIcon from 'material-ui-icons/Folder'
+import InfoIcon from 'material-ui-icons/Info'
+import MessageIcon from 'material-ui-icons/Message'
 import PhotoLibraryIcon from 'material-ui-icons/PhotoLibrary'
 
 const drawerWidth = 240;
@@ -47,14 +48,18 @@ const PrimaryList = () => (
 
 const SecondaryList = () => (
     <List>
-        <ListItem button>
-        <ListItemIcon><FolderIcon/></ListItemIcon>
-        <ListItemText primary='Thing One'/>
-        </ListItem>
-        <ListItem button>
-        <ListItemIcon><FolderIcon/></ListItemIcon>
-        <ListItemText primary='Thing Two'/>
-        </ListItem>
+        <Link to='/notifications'>
+            <ListItem button>
+            <ListItemIcon><MessageIcon/></ListItemIcon>
+            <ListItemText primary='Notifications'/>
+            </ListItem>
+        </Link>
+        <Link to='/about'>
+            <ListItem button>
+            <ListItemIcon><InfoIcon/></ListItemIcon>
+            <ListItemText primary='About'/>
+            </ListItem>
+        </Link>
     </List>
 )
 
