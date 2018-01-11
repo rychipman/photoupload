@@ -42,6 +42,7 @@ const filesReducer = createReducer([], {
             succeeded: true,
             uploaded: true,
             uploading: false,
+            failed: false,
         })
     ),
 
