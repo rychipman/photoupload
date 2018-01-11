@@ -6,6 +6,7 @@ import {
     fileUploaded,
     fileUploading,
     fileUploadFailed,
+    createNotification,
 } from '../actions'
 
 const api = {}
@@ -23,23 +24,25 @@ function* uploadFile(action) {
     yield put(fileUploading(action.id))
     yield delay(Math.random()*5000)
 
+    let fail = false
     if (Math.random() > 0.5) {
-        yield put(fileUploadFailed(action.id))
-        return
+        fail = true
     }
 
     try {
         const data = yield call(api.upload, action.file)
-        if (!data.Success) {
-            console.log(data)
-            yield put(fileUploadFailed(action.id))
-        } else {
+        if (data.Success && !fail) {
             console.log(data)
             yield put(fileUploaded(action.id, data.Thumb))
+        } else {
+            console.log(data)
+            yield put(fileUploadFailed(action.id))
+            yield put(createNotification('upload failed'))
         }
     } catch(e) {
         console.log(e)
         yield put(fileUploadFailed(action.id))
+        yield put(createNotification('upload failed with uncaught err'))
     }
 
 }

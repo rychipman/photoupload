@@ -20,10 +20,7 @@ import defaultSaga from './sagas'
 const initialState = {
     files: [],
     ui: {
-        notifications: [
-            { id: 0, text: 'hello' },
-            { id: 1, text: 'this is a notification' },
-        ],
+        notifications: [],
     },
 }
 
