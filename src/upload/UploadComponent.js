@@ -32,20 +32,18 @@ const styles = (theme) => ({
     },
 })
 
-const fileList = ({ classes, title, files, fileAction }) => {
-    // TODO: make this toggleable
-    let expanded = true
+const fileList = ({ classes, title, files, fileAction, open, toggle }) => {
     return <Paper elevation={2} className={classes.paper}>
         <List disablePadding>
             <ListItem key='header'>
                 <ListItemText primary={title}/>
                 <ListItemSecondaryAction>
-                    <IconButton aria-label='expand'>
-                        {expanded ? <ExpandLess/> : <ExpandMore/>}
+                    <IconButton aria-label='expand' onClick={toggle}>
+                        {open ? <ExpandLess/> : <ExpandMore/>}
                     </IconButton>
                 </ListItemSecondaryAction>
             </ListItem>
-            <Collapse component='li' transition='auto' in={expanded}>
+            <Collapse component='li' transition='auto' in={open}>
                 <Divider/>
                 <List dense disablePadding>
                     {files.map(file => {
@@ -64,12 +62,8 @@ const fileList = ({ classes, title, files, fileAction }) => {
 }
 const FileList = withStyles(styles)(fileList)
 
-const UploadedList = ({ files, onDismiss }) => {
+const UploadedList = ({ files, onDismiss, open, toggle }) => {
     const successFiles = files.filter(f => f.uploaded && f.succeeded)
-
-    if (successFiles.length === 0) {
-        return null
-    }
 
     const header = (
         <Button onClick={() => successFiles.map((f) => onDismiss(f.id))}>
@@ -85,6 +79,8 @@ const UploadedList = ({ files, onDismiss }) => {
 
     return (
         <FileList
+            open={open}
+            toggle={toggle}
             title={header}
             files={successFiles}
             fileAction={fileAction}
@@ -92,12 +88,8 @@ const UploadedList = ({ files, onDismiss }) => {
     )
 }
 
-const FailedList = ({ files, onFileDelete, onUpload }) => {
+const FailedList = ({ files, onFileDelete, onUpload, open, toggle }) => {
     const failedFiles = files.filter(f => f.failed)
-
-    if (failedFiles.length === 0) {
-        return null
-    }
 
     const header = (
         <div>
@@ -120,6 +112,8 @@ const FailedList = ({ files, onFileDelete, onUpload }) => {
 
     return (
         <FileList
+            open={open}
+            toggle={toggle}
             title={header}
             files={failedFiles}
             fileAction={fileAction}
@@ -127,13 +121,9 @@ const FailedList = ({ files, onFileDelete, onUpload }) => {
     )
 }
 
-const QueuedList = ({ files, onFileDelete, onUpload }) => {
+const QueuedList = ({ files, onFileDelete, onUpload, open, toggle }) => {
     const unuploadedFiles = files.filter(f => !f.uploaded && !f.failed)
     const queuedFiles = unuploadedFiles.filter(f => !f.uploading)
-
-    if (unuploadedFiles.length === 0) {
-        return null
-    }
 
     const header = (
         <div>
@@ -156,6 +146,8 @@ const QueuedList = ({ files, onFileDelete, onUpload }) => {
 
     return (
         <FileList
+            open={open}
+            toggle={toggle}
             title={header}
             files={unuploadedFiles}
             fileAction={fileAction}
@@ -187,9 +179,15 @@ const UploadButton = ({ classes, onFileAdd }) => {
 
 const UploadComponent = (props) => (
     <div>
-        <UploadedList {...props}/>
-        <FailedList {...props}/>
-        <QueuedList {...props}/>
+        <UploadedList {...props}
+            open={props.uploadedListOpen}
+            toggle={props.uploadedListToggle}/>
+        <FailedList {...props}
+            open={props.failedListOpen}
+            toggle={props.failedListToggle}/>
+        <QueuedList {...props}
+            open={props.queuedListOpen}
+            toggle={props.queuedListToggle}/>
         <UploadButton {...props}/>
     </div>
 )

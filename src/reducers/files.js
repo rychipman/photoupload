@@ -8,7 +8,7 @@ import {
     FILE_UPLOAD_FAILED,
 } from '../actions';
 
-const filesReducer = createReducer([], {
+const filesReducer = createReducer({
 
     [ADD_FILE]: (state, action) => (
         [

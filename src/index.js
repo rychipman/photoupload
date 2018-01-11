@@ -21,6 +21,13 @@ const initialState = {
     files: [],
     ui: {
         notifications: [],
+        uploads: {
+            lists: {
+                uploaded: false,
+                failed: false,
+                queued: true,
+            },
+        },
     },
 }
 

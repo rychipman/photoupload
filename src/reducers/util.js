@@ -1,6 +1,6 @@
 
-export const createReducer = (initial, handlers) => (
-    (state = initial, action) => {
+export const createReducer = (handlers) => (
+    (state = null, action) => {
         if (handlers.hasOwnProperty(action.type)) {
             return handlers[action.type](state, action)
         }
