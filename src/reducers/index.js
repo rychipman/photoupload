@@ -52,6 +52,7 @@ const uploadApp = (state=initialState, action) => {
                         file.uri = action.uri
                         file.succeeded = true
                         file.uploaded = true
+                        file.uploading = false
                     }
                     return file
                 })
