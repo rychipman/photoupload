@@ -14,12 +14,17 @@ import 'typeface-roboto'
 
 import AppLayout from './layouts/AppLayout'
 import Upload from './upload'
-import Files from './files'
+import Notifications from './notifications'
 import defaultSaga from './sagas'
 
 const initialState = {
     files: [],
-    ui: [],
+    ui: {
+        notifications: [
+            { id: 0, text: 'hello' },
+            { id: 1, text: 'this is a notification' },
+        ],
+    },
 }
 
 const saga = createSagaMiddleware()
@@ -40,6 +45,7 @@ const App = () => (
             <Router>
             <AppLayout>
                 <Route path='/upload' component={Upload}/>
+                <Route path='/notifications' component={Notifications}/>
             </AppLayout>
             </Router>
         </div>

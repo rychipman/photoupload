@@ -1,10 +1,11 @@
+import { combineReducers } from 'redux'
 import { createReducer } from './util'
 import {
     CREATE_NOTIFICATION,
     CLOSE_NOTIFICATION,
 } from '../actions';
 
-const uiReducer = createReducer([], {
+const notificationsReducer = createReducer([], {
 
     [CREATE_NOTIFICATION]: (state, action) => (
         [
@@ -23,4 +24,6 @@ const uiReducer = createReducer([], {
 
 })
 
-export default uiReducer
+export default combineReducers({
+    notifications: notificationsReducer
+})

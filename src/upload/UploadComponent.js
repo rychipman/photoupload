@@ -9,7 +9,6 @@ import Divider from 'material-ui/Divider'
 import IconButton from 'material-ui/IconButton'
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import Paper from 'material-ui/Paper'
-import Snackbar from 'material-ui/Snackbar'
 
 import AddIcon from 'material-ui-icons/Add'
 import CheckIcon from 'material-ui-icons/Check'
@@ -164,53 +163,6 @@ const QueuedList = ({ files, onFileDelete, onUpload }) => {
     )
 }
 
-/*
-const QueuedList = ({ classes, files, onFileAdd, onFileDelete, onUpload, notifications, onNotificationClose }) => {
-    const unuploadedFiles = files.filter(f => !f.uploaded && !f.failed)
-    const queuedFiles = unuploadedFiles.filter(f => !f.uploading)
-
-    if (unuploadedFiles.length === 0) {
-        return null
-    }
-
-    return <Paper elevation={2} className={classes.paper}>
-        <List disablePadding>
-            <ListItem key='header'>
-                <Button
-                    onClick={() => onUpload(queuedFiles)}
-                >
-                        Upload {queuedFiles.length} files
-                </Button>
-                <Button
-                    onClick={() => queuedFiles.map(f => onFileDelete(f.id))}
-                >
-                    Unqueue {queuedFiles.length} files
-                </Button>
-            </ListItem>
-        </List>
-        <Divider/>
-        <List dense disablePadding>
-            {unuploadedFiles.map(file => {
-                let deleteFile = () => onFileDelete(file.id)
-                return <ListItem key={file.id}>
-                    <Avatar>{file.filename.slice(0, 1)}</Avatar>
-                    <ListItemText primary={file.filename}/>
-                    <ListItemSecondaryAction>
-                    {
-                        file.uploading
-                        ? <CircularProgress/>
-                        : <IconButton aria-label='delete' onClick={deleteFile}>
-                              <DeleteIcon />
-                          </IconButton>
-                    }
-                    </ListItemSecondaryAction>
-                </ListItem>
-            })}
-        </List>
-    </Paper>
-}
-*/
-
 const UploadButton = ({ classes, onFileAdd }) => {
     return <Button
         fab
@@ -243,21 +195,3 @@ const UploadComponent = (props) => (
 )
 
 export default withStyles(styles)(UploadComponent)
-
-/*
-
-    {notifications.map(note => (
-        <Snackbar
-            key={note.id}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}
-            open={note.open}
-            message={note.text}
-            autoHideDuration={1500}
-            onClose={() => onNotificationClose(note.id)}
-        />
-    ))}
-
-*/
