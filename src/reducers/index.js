@@ -14,10 +14,22 @@ const initialState = {
     notifications: [],
 }
 
+const update = (obj, vals) => Object.assign({}, obj, vals)
+const updateArray = (arr, id, fn) => (
+    arr.map(item => (
+        item.id === id
+        ? fn(item)
+        : item
+    ))
+)
+const updateArrayVals = (arr, id, vals) => (
+    updateArray(arr, id, (item) => update(item, vals))
+)
+
 const uploadApp = (state=initialState, action) => {
     switch (action.type) {
         case ADD_FILE:
-            return Object.assign({}, state, {
+            return update(state, {
                 files: [
                     ...state.files,
                     {
@@ -33,51 +45,39 @@ const uploadApp = (state=initialState, action) => {
                 ]
             })
         case REMOVE_FILE:
-            return Object.assign({}, state, {
+            return update(state, {
                 files: state.files.filter(file => file.id !== action.id)
             })
         case DISMISS_FILE_SUCCESS:
-            return Object.assign({}, state, {
-                files: state.files.map(file => {
-                    if (file.id === action.id) {
-                        file.succeeded = false
-                    }
-                    return file
+            return update(state, {
+                files: updateArrayVals(state.files, action.id, {
+                    succeeded: false,
                 })
             })
         case FILE_UPLOADED:
-            return Object.assign({}, state, {
-                files: state.files.map(file => {
-                    if (file.id === action.id) {
-                        file.uri = action.uri
-                        file.succeeded = true
-                        file.uploaded = true
-                        file.uploading = false
-                    }
-                    return file
+            return update(state, {
+                files: updateArrayVals(state.files, action.id, {
+                    uri: action.uri,
+                    succeeded: true,
+                    uploaded: true,
+                    uploading: false,
                 })
             })
         case FILE_UPLOADING:
-            return Object.assign({}, state, {
-                files: state.files.map(file => {
-                    if (file.id === action.id) {
-                        file.uploading = true
-                    }
-                    return file
+            return update(state, {
+                files: updateArrayVals(state.files, action.id, {
+                    uploading: true,
                 })
             })
         case FILE_UPLOAD_FAILED:
-            return Object.assign({}, state, {
-                files: state.files.map(file => {
-                    if (file.id === action.id) {
-                        file.failed = true
-                        file.uploading = false
-                    }
-                    return file
+            return update(state, {
+                files: updateArrayVals(state.files, action.id, {
+                    failed: true,
+                    uploading: false,
                 })
             })
         case CREATE_NOTIFICATION:
-            return Object.assign({}, state, {
+            return update(state, {
                 notifications: [
                     ...state.notifications,
                     {
@@ -88,12 +88,9 @@ const uploadApp = (state=initialState, action) => {
                 ],
             })
         case CLOSE_NOTIFICATION:
-            return Object.assign({}, state, {
-                notifications: state.notifications.map(n => {
-                    if (n.id === action.id) {
-                        n.open = false
-                    }
-                    return n
+            return update(state, {
+                files: updateArrayVals(state.notifications, action.id, {
+                    open: false,
                 })
             })
         default:
