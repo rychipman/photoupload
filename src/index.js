@@ -19,7 +19,7 @@ import defaultSaga from './sagas'
 
 const initialState = {
     files: [],
-    notifications: [],
+    ui: [],
 }
 
 const saga = createSagaMiddleware()
@@ -40,7 +40,6 @@ const App = () => (
             <Router>
             <AppLayout>
                 <Route path='/upload' component={Upload}/>
-                <Route path='/files' component={Files}/>
             </AppLayout>
             </Router>
         </div>
