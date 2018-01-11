@@ -1,6 +1,12 @@
 import { connect } from 'react-redux'
 
-import { addFile, removeFile, uploadFile, closeNotification } from '../actions'
+import {
+    addFile,
+    removeFile,
+    uploadFile,
+    dismissFileSuccess,
+    closeNotification,
+} from '../actions'
 import UploadComponent from './UploadComponent.js'
 
 const mapStateToProps = (state) => ({
@@ -12,7 +18,7 @@ const mapDispatchToProps = (dispatch) => ({
     onFileAdd: (file) => dispatch(addFile(file)),
     onFileDelete: (id) => dispatch(removeFile(id)),
     onUpload: (files) => files.map(f => dispatch(uploadFile(f.id, f.data))),
-
+    onDismiss: (id) => dispatch(dismissFileSuccess(id)),
     onNotificationClose: (id) => dispatch(closeNotification(id)),
 })
 

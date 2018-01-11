@@ -1,4 +1,13 @@
-import { ADD_FILE, REMOVE_FILE, SET_FILE_UPLOADING_STATE, FILE_UPLOADED, CREATE_NOTIFICATION, CLOSE_NOTIFICATION } from '../actions';
+import {
+    ADD_FILE,
+    REMOVE_FILE,
+    DISMISS_FILE_SUCCESS,
+    FILE_UPLOADED,
+    FILE_UPLOADING,
+    FILE_UPLOAD_FAILED,
+    CREATE_NOTIFICATION,
+    CLOSE_NOTIFICATION,
+} from '../actions';
 
 const initialState = {
     files: [],
@@ -16,8 +25,10 @@ const uploadApp = (state=initialState, action) => {
                         filename: action.filename,
                         data: action.data,
                         uri: '',
-                        uploadState: '',
-                        staged: false,
+                        succeeded: false,
+                        failed: false,
+                        uploaded: false,
+                        uploading: false,
                     }
                 ]
             })
@@ -25,22 +36,41 @@ const uploadApp = (state=initialState, action) => {
             return Object.assign({}, state, {
                 files: state.files.filter(file => file.id !== action.id)
             })
-        case FILE_UPLOADED:
+        case DISMISS_FILE_SUCCESS:
             return Object.assign({}, state, {
                 files: state.files.map(file => {
                     if (file.id === action.id) {
-                        file.uploadState = 'uploaded'
-                        file.uri = action.uri
-                        file.staged = true
+                        file.succeeded = false
                     }
                     return file
                 })
             })
-        case SET_FILE_UPLOADING_STATE:
+        case FILE_UPLOADED:
             return Object.assign({}, state, {
                 files: state.files.map(file => {
                     if (file.id === action.id) {
-                        file.uploadState = action.state
+                        file.uri = action.uri
+                        file.succeeded = true
+                        file.uploaded = true
+                    }
+                    return file
+                })
+            })
+        case FILE_UPLOADING:
+            return Object.assign({}, state, {
+                files: state.files.map(file => {
+                    if (file.id === action.id) {
+                        file.uploading = true
+                    }
+                    return file
+                })
+            })
+        case FILE_UPLOAD_FAILED:
+            return Object.assign({}, state, {
+                files: state.files.map(file => {
+                    if (file.id === action.id) {
+                        file.failed = true
+                        file.uploading = false
                     }
                     return file
                 })

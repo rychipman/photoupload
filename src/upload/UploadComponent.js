@@ -16,6 +16,7 @@ import CheckIcon from 'material-ui-icons/Check'
 import DeleteIcon from 'material-ui-icons/Delete'
 import ExpandLess from 'material-ui-icons/ExpandLess'
 import ExpandMore from 'material-ui-icons/ExpandMore'
+import RefreshIcon from 'material-ui-icons/Refresh'
 
 const styles = (theme) => ({
     paper: {
@@ -32,21 +33,13 @@ const styles = (theme) => ({
     },
 })
 
-const UploadedList = ({ classes, files }) => {
-    const uploadedFiles = files.filter(f => f.uploadState === 'uploaded')
-    const stagedUploadedFiles = uploadedFiles.filter(f => f.staged)
-
-    if (stagedUploadedFiles.length === 0) {
-        return null
-    }
-
+const fileList = ({ classes, title, files, fileAction }) => {
     // TODO: make this toggleable
     let expanded = true
-
     return <Paper elevation={2} className={classes.paper}>
         <List disablePadding>
-            <ListItem key='header' button>
-                <ListItemText primary={stagedUploadedFiles.length + ' files uploaded'}/>
+            <ListItem key='header'>
+                <ListItemText primary={title}/>
                 <ListItemSecondaryAction>
                     <IconButton aria-label='expand'>
                         {expanded ? <ExpandLess/> : <ExpandMore/>}
@@ -56,14 +49,12 @@ const UploadedList = ({ classes, files }) => {
             <Collapse component='li' transition='auto' in={expanded}>
                 <Divider/>
                 <List dense disablePadding>
-                    {stagedUploadedFiles.map(file => {
+                    {files.map(file => {
                         return <ListItem key={file.id}>
                             <Avatar>{file.filename.slice(0, 1)}</Avatar>
                             <ListItemText inset primary={file.filename}/>
                             <ListItemSecondaryAction>
-                                <IconButton aria-label='accept'>
-                                    <CheckIcon />
-                                </IconButton>
+                                {fileAction(file)}
                             </ListItemSecondaryAction>
                         </ListItem>
                     })}
@@ -72,10 +63,111 @@ const UploadedList = ({ classes, files }) => {
         </List>
     </Paper>
 }
+const FileList = withStyles(styles)(fileList)
 
+const UploadedList = ({ files, onDismiss }) => {
+    const successFiles = files.filter(f => f.uploaded && f.succeeded)
+
+    if (successFiles.length === 0) {
+        return null
+    }
+
+    const header = (
+        <Button onClick={() => successFiles.map((f) => onDismiss(f.id))}>
+            Dismiss {successFiles.length} successful uploads
+        </Button>
+    )
+
+    const fileAction = (file) => (
+        <IconButton onClick={() => onDismiss(file.id)}>
+            <CheckIcon/>
+        </IconButton>
+    )
+
+    return (
+        <FileList
+            title={header}
+            files={successFiles}
+            fileAction={fileAction}
+        />
+    )
+}
+
+const FailedList = ({ files, onFileDelete, onUpload }) => {
+    const failedFiles = files.filter(f => f.failed)
+
+    if (failedFiles.length === 0) {
+        return null
+    }
+
+    const header = (
+        <div>
+            <Button onClick={() => onUpload(failedFiles)}>
+                Retry {failedFiles.length} failed uploads
+            </Button>
+            <Button onClick={() => failedFiles.map(f => onFileDelete(f.id))}>
+                Unqueue {failedFiles.length} files
+            </Button>
+        </div>
+    )
+
+    const fileAction = (file) => (
+        file.uploading
+        ? <CircularProgress/>
+        : <IconButton onClick={() => onUpload([file])}>
+              <RefreshIcon/>
+          </IconButton>
+    )
+
+    return (
+        <FileList
+            title={header}
+            files={failedFiles}
+            fileAction={fileAction}
+        />
+    )
+}
+
+const QueuedList = ({ files, onFileDelete, onUpload }) => {
+    const unuploadedFiles = files.filter(f => !f.uploaded && !f.failed)
+    const queuedFiles = unuploadedFiles.filter(f => !f.uploading)
+
+    if (unuploadedFiles.length === 0) {
+        return null
+    }
+
+    const header = (
+        <div>
+            <Button onClick={() => onUpload(queuedFiles)}>
+                    Upload {queuedFiles.length} files
+            </Button>
+            <Button onClick={() => queuedFiles.map(f => onFileDelete(f.id))}>
+                Unqueue {queuedFiles.length} files
+            </Button>
+        </div>
+    )
+
+    const fileAction = (file) => (
+        file.uploading
+        ? <CircularProgress/>
+        : <IconButton onClick={() => onFileDelete(file.id)}>
+              <DeleteIcon/>
+          </IconButton>
+    )
+
+    return (
+        <FileList
+            title={header}
+            files={unuploadedFiles}
+            fileAction={fileAction}
+        />
+    )
+}
+
+/*
 const QueuedList = ({ classes, files, onFileAdd, onFileDelete, onUpload, notifications, onNotificationClose }) => {
-    const unuploadedFiles = files.filter(f => f.uploadState !== 'uploaded')
-    const queuedFiles = unuploadedFiles.filter(f => f.uploadState !== 'uploading')
+    const unuploadedFiles = files.filter(f => !f.uploaded && !f.failed)
+    const queuedFiles = unuploadedFiles.filter(f => !f.uploading)
 
     if (unuploadedFiles.length === 0) {
         return null
@@ -105,7 +197,7 @@ const QueuedList = ({ classes, files, onFileAdd, onFileDelete, onUpload, notific
                     <ListItemText primary={file.filename}/>
                     <ListItemSecondaryAction>
                     {
-                        file.uploadState === 'uploading'
+                        file.uploading
                         ? <CircularProgress/>
                         : <IconButton aria-label='delete' onClick={deleteFile}>
                               <DeleteIcon />
@@ -117,6 +209,7 @@ const QueuedList = ({ classes, files, onFileAdd, onFileDelete, onUpload, notific
         </List>
     </Paper>
 }
+*/
 
 const UploadButton = ({ classes, onFileAdd }) => {
     return <Button
@@ -143,6 +236,7 @@ const UploadButton = ({ classes, onFileAdd }) => {
 const UploadComponent = (props) => (
     <div>
         <UploadedList {...props}/>
+        <FailedList {...props}/>
         <QueuedList {...props}/>
         <UploadButton {...props}/>
     </div>

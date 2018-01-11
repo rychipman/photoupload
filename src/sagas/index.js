@@ -2,7 +2,11 @@ import { delay } from 'redux-saga'
 import { call, put, takeEvery } from 'redux-saga/effects'
 
 import { UPLOAD_FILE } from '../actions'
-import { fileUploaded, setFileUploadingState } from '../actions'
+import {
+    fileUploaded,
+    fileUploading,
+    fileUploadFailed,
+} from '../actions'
 
 const api = {}
 api.upload = (file) => {
@@ -16,19 +20,21 @@ api.upload = (file) => {
 }
 
 function* uploadFile(action) {
-    yield put(setFileUploadingState(action.id, 'uploading'))
+    yield put(fileUploading(action.id))
     yield delay(Math.random()*5000)
 
     try {
         const data = yield call(api.upload, action.file)
         if (!data.Success) {
             console.log(data)
-            yield put(setFileUploadingState(action.id, ''))
+            yield put(fileUploadFailed(action.id))
+        } else {
+            console.log(data)
+            yield put(fileUploaded(action.id, data.Thumb))
         }
-        yield put(fileUploaded(action.id, data.Message))
     } catch(e) {
         console.log(e)
-        yield put(setFileUploadingState(action.id, ''))
+        yield put(fileUploadFailed(action.id))
     }
 
 }
