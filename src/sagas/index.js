@@ -23,6 +23,11 @@ function* uploadFile(action) {
     yield put(fileUploading(action.id))
     yield delay(Math.random()*5000)
 
+    if (Math.random() > 0.5) {
+        yield put(fileUploadFailed(action.id))
+        return
+    }
+
     try {
         const data = yield call(api.upload, action.file)
         if (!data.Success) {
