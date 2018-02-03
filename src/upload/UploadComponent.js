@@ -30,7 +30,7 @@ const styles = (theme) => ({
         margin: 15,
     },
     fab: {
-        position: 'absolute',
+        position: 'fixed',
         bottom: theme.spacing.unit * 4,
         right: theme.spacing.unit * 5,
     },
