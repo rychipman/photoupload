@@ -75,22 +75,24 @@ const UploaderHeader = ({ onFileAdd }) => {
     )
 }
 
+const File = ({ file, action }) => (
+    <Segment key={file.id} textAlign='left' clearing>
+        <Icon name='image' circular color='teal'/>
+        <span style={{marginLeft: '13px'}}>
+            {file.filename}
+        </span>
+        <Popup
+            trigger={action}
+            content='delete this file'
+            size='tiny'
+            position='left center'
+        />
+    </Segment>
+)
+
 const FileList = ({ files, onFileAdd }) => {
     const button = <Button floated='right' icon='trash' size='tiny'/>
-    const fileList = files.map(file => (
-        <Segment key={file.id} textAlign='left' clearing>
-            <Icon name='image' circular color='teal'/>
-            <span style={{marginLeft: '13px'}}>
-                {file.filename}
-            </span>
-            <Popup
-                trigger={button}
-                content='delete this file'
-                size='tiny'
-                position='left center'
-            />
-        </Segment>
-    ))
+    const fileList = files.map(f => <File file={f} action={button} /> )
     const defaultContent = (
         <Segment textAlign='center' secondary>
             No files to show. Select files for upload or modify filters.
