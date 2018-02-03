@@ -11,6 +11,7 @@ import { Route, BrowserRouter as Router } from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css'
 
 import LoginPage from './layouts/LoginLayout.js'
+import { LoginDimmer } from './login'
 import Uploader from './uploader'
 import defaultSaga from './sagas'
 
@@ -49,7 +50,7 @@ const App = () => (
     <Provider store={store}>
         <Router>
             <div style={{height: '100%'}}>
-                <Route path='/login' component={LoginPage}/>
+                <LoginDimmer/>
                 <Route path='/upload' component={Uploader}/>
             </div>
         </Router>
