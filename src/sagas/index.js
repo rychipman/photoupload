@@ -1,54 +1,163 @@
-import { delay } from 'redux-saga'
-import { call, put, takeEvery } from 'redux-saga/effects'
-
-import { UPLOAD_FILE } from '../actions'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { LOCATION_CHANGE, push as navigateTo } from 'react-router-redux'
+import { getFileData } from '../selectors'
+import api from '../api'
 import {
-    fileUploaded,
-    fileUploading,
-    fileUploadFailed,
+    SIGNUP,
+    SIGNUP_FAILED,
+    SIGNUP_SUCCESSFUL,
+    signupSuccessful,
+    signupFailed,
+} from '../actions'
+import {
+    LOGIN,
+    LOGIN_FAILED,
+    LOGIN_SUCCESSFUL,
+    loginSuccessful,
+    loginFailed,
+} from '../actions'
+import {
+    ADD_FILE,
+    UPLOAD_FILE,
+    UPLOAD_FILE_FAILED,
+    uploadFile,
+    uploadFileSuccessful,
+    uploadFileFailed,
+} from '../actions'
+import {
+    AUTH_TOKEN_REJECTED,
+    PAGE_NEEDS_AUTH,
+    pageNeedsAuth,
+    authTokenRejected,
     createNotification,
 } from '../actions'
 
-const api = {}
-api.upload = (file) => {
-    const formData = new FormData()
-    formData.append('file', file)
-    return fetch('http://localhost:8080/upload', {
-        method: 'POST',
-        headers:{ },
-        body: formData,
-    }).then(res => res.json())
+function* apiCall(name, ...args) {
+    const token = yield select(state => state.auth.token)
+    const res = yield call(api[name], token, ...args)
+    return res
 }
 
-function* uploadFile(action) {
-    yield put(fileUploading(action.id))
-    yield delay(Math.random()*5000)
+function* handleAddFile(action) {
+    yield put(uploadFile(action.id))
+}
 
-    let fail = false
-    if (Math.random() > 0.5) {
-        fail = true
+function* handleUpload(action) {
+    const file = yield select(state => getFileData(state, action.id))
+    const res = yield call(apiCall, 'upload', file)
+    if (res.ok) {
+        yield put(uploadFileSuccessful(action.id, res.data.hash))
+    } else {
+        yield put(uploadFileFailed(action.id, res.data.message))
     }
+}
 
-    try {
-        const data = yield call(api.upload, action.file)
-        if (data.Success && !fail) {
-            console.log(data)
-            yield put(fileUploaded(action.id, data.Thumb))
-        } else {
-            console.log(data)
-            yield put(fileUploadFailed(action.id))
-            yield put(createNotification('upload failed'))
+function* handleLogin(action) {
+    const res = yield call(apiCall, 'getToken', action.email, action.password)
+    if (res.ok) {
+        yield put(loginSuccessful(action.email, res.data.token))
+        yield put(navigateTo('/upload'))
+    } else {
+        yield put(loginFailed(res.data.message))
+    }
+}
+
+function* handleSignup(action) {
+    const res = yield call(apiCall, 'signup', action.email, action.password)
+    if (res.ok) {
+        yield put(signupSuccessful())
+        yield put(navigateTo('/login'))
+    } else {
+        yield put(signupFailed(res.data.message))
+    }
+}
+
+function* handleNavigate(action) {
+    switch (action.payload.pathname) {
+    case '/upload':
+        const loggedIn = yield select(state => state.auth.token !== '')
+        if (!loggedIn) {
+            yield put(pageNeedsAuth())
         }
-    } catch(e) {
-        console.log(e)
-        yield put(fileUploadFailed(action.id))
-        yield put(createNotification('upload failed with uncaught err'))
+        return
+    default:
+        // do nothing
     }
+}
 
+function* handleRedirect(action) {
+    yield put(navigateTo('/login'))
+}
+
+function* handleNotify(action) {
+    switch (action.type) {
+    case AUTH_TOKEN_REJECTED:
+        yield put(createNotification(
+            'Session Expired',
+            'You have been logged out due to inactivity. '
+              + 'Please login again to continue',
+            'warning',
+        ))
+        return
+    case SIGNUP_FAILED:
+        yield put(createNotification(
+            'Signup Failed',
+            action.message,
+            'error',
+        ))
+        return
+    case SIGNUP_SUCCESSFUL:
+        yield put(createNotification(
+            'Signup Successful',
+            'Now log in with your new account.',
+            'success',
+        ))
+        return
+    case LOGIN_FAILED:
+        yield put(createNotification(
+            'Login Failed',
+            action.message,
+            'error',
+        ))
+        return
+    case LOGIN_SUCCESSFUL:
+        yield put(createNotification(
+            'Login Successful',
+            'Time to start uploading photos!',
+            'success',
+        ))
+        return
+    case UPLOAD_FILE_FAILED:
+        if (action.message.includes('Token is expired')) {
+            yield put(authTokenRejected())
+        } else {
+            yield put(createNotification(
+                'Upload Failed',
+                action.message,
+                'error',
+            ))
+        }
+        return
+    case PAGE_NEEDS_AUTH:
+        yield put(createNotification(
+            'Not Logged In',
+            'You need to be logged in to access that page. Sign in and then try again.',
+            'warning',
+        ))
+        return
+    default:
+        // do nothing
+    }
 }
 
 function* watch() {
-    yield takeEvery(UPLOAD_FILE, uploadFile)
+    yield takeEvery(ADD_FILE, handleAddFile)
+    yield takeEvery(UPLOAD_FILE, handleUpload)
+    yield takeEvery(LOGIN, handleLogin)
+    yield takeEvery(SIGNUP, handleSignup)
+    yield takeEvery(LOCATION_CHANGE, handleNavigate)
+    yield takeEvery([ PAGE_NEEDS_AUTH, AUTH_TOKEN_REJECTED ], handleRedirect)
+    yield takeEvery('*', handleNotify)
 }
 
 export default watch

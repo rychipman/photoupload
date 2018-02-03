@@ -1,20 +1,26 @@
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { createTransform, persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import { PersistGate } from 'redux-persist/lib/integration/react'
+
 import createSagaMiddleware from 'redux-saga'
 import rootReducer from './reducers/'
 
-
 import React from 'react'
 import { render } from 'react-dom'
-import { Route, BrowserRouter as Router } from 'react-router-dom'
-import Reboot from 'material-ui/Reboot'
+import { Route } from 'react-router'
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
 
-import 'typeface-roboto'
+import 'semantic-ui-css/semantic.min.css'
 
-import AppLayout from './layouts/AppLayout'
-import Upload from './upload'
-import Notifications from './notifications'
+import Login from './auth/Login.js'
+import Signup from './auth/Signup.js'
+import Uploader from './uploader'
+import Notifications from './notifications/Notifications.js'
+import Menu from './menu/Menu.js'
 import defaultSaga from './sagas'
 
 const initialState = {
@@ -23,36 +29,69 @@ const initialState = {
         notifications: [],
         uploads: {
             lists: {
-                uploaded: false,
-                failed: false,
+                uploaded: true,
+                failed: true,
                 queued: true,
             },
         },
+        login: {
+            inProgress: false,
+        },
+        signup: {
+            inProgress: false,
+        },
     },
+    auth: {
+        email: '',
+        token: '',
+    }
 }
 
 const saga = createSagaMiddleware()
-const middleware = [ saga ]
+
+const history = createHistory()
+const router = routerMiddleware(history)
+
+const middleware = [ router, saga ]
+
+const fileTransform = createTransform(
+    (inboundState) => inboundState,
+    (outboundState) => outboundState.filter(f => f.uploaded),
+    { whitelist: 'files' },
+)
+
+const persistedReducer = persistReducer({
+    key: 'root',
+    storage: storage,
+    whitelist: ['auth', 'files'],
+    debug: true,
+    transforms: [
+        fileTransform,
+    ],
+}, rootReducer)
 
 let store = createStore(
-    rootReducer,
+    persistedReducer,
     initialState,
     composeWithDevTools(applyMiddleware(...middleware)),
 )
 
+const persistor = persistStore(store)
 saga.run(defaultSaga)
 
 const App = () => (
     <Provider store={store}>
-        <div>
-            <Reboot/>
-            <Router>
-            <AppLayout>
-                <Route path='/upload' component={Upload}/>
-                <Route path='/notifications' component={Notifications}/>
-            </AppLayout>
-            </Router>
-        </div>
+    <PersistGate persistor={persistor} loading={null}>
+        <ConnectedRouter history={history}>
+            <div style={{height: '100%', paddingTop: '50px'}}>
+                <Menu/>
+                <Notifications/>
+                <Route path='/upload' component={Uploader}/>
+                <Route path='/login' component={Login}/>
+                <Route path='/signup' component={Signup}/>
+            </div>
+        </ConnectedRouter>
+    </PersistGate>
     </Provider>
 )
 

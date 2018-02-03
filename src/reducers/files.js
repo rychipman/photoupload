@@ -1,61 +1,54 @@
 import { createReducer, updateArrayVals } from './util'
 import {
+    LOGIN,
     ADD_FILE,
-    REMOVE_FILE,
-    DISMISS_FILE_SUCCESS,
-    FILE_UPLOADED,
-    FILE_UPLOADING,
-    FILE_UPLOAD_FAILED,
+    UPLOAD_FILE,
+    UPLOAD_FILE_FAILED,
+    UPLOAD_FILE_SUCCESSFUL,
 } from '../actions';
 
 const filesReducer = createReducer({
 
+    [LOGIN]: (state, action) => [],
+
     [ADD_FILE]: (state, action) => (
         [
-            ...state,
             {
                 id: action.id,
-                filename: action.filename,
-                data: action.data,
+                filename: action.file.name,
+                data: action.file,
                 uri: '',
-                succeeded: false,
                 failed: false,
                 uploaded: false,
                 uploading: false,
-            }
+            },
+            ...state,
         ]
     ),
 
-    [REMOVE_FILE]: (state, action) => (
-        state.filter(f => f.id !== action.id)
-    ),
-
-    [DISMISS_FILE_SUCCESS]: (state, action) => (
+    [UPLOAD_FILE]: (state, action) => (
         updateArrayVals(state, action.id, {
-            succeeded: false,
-        })
-    ),
-
-    [FILE_UPLOADED]: (state, action) => (
-        updateArrayVals(state, action.id, {
-            uri: action.uri,
-            succeeded: true,
-            uploaded: true,
-            uploading: false,
+            uri: '',
             failed: false,
-        })
-    ),
-
-    [FILE_UPLOADING]: (state, action) => (
-        updateArrayVals(state, action.id, {
+            uploaded: false,
             uploading: true,
         })
     ),
 
-    [FILE_UPLOAD_FAILED]: (state, action) => (
+    [UPLOAD_FILE_FAILED]: (state, action) => (
         updateArrayVals(state, action.id, {
             failed: true,
             uploading: false,
+            uploaded: false,
+        })
+    ),
+
+    [UPLOAD_FILE_SUCCESSFUL]: (state, action) => (
+        updateArrayVals(state, action.id, {
+            data: '',
+            uploaded: true,
+            uploading: false,
+            failed: false,
         })
     ),
 
