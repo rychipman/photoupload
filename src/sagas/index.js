@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 
-import { UPLOAD_FILE } from '../actions'
+import { UPLOAD_FILE, RETRY_UPLOAD_FILE } from '../actions'
 import {
     fileUploaded,
     fileUploading,
@@ -42,6 +42,7 @@ function* uploadFile(action) {
 
 function* watch() {
     yield takeEvery(UPLOAD_FILE, uploadFile)
+    yield takeEvery(RETRY_UPLOAD_FILE, uploadFile)
 }
 
 export default watch

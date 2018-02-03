@@ -92,9 +92,16 @@ const UploaderHeader = (props) => {
     )
 }
 
-const File = ({ file }) => {
-    const retryButton = <Button floated='right' icon='repeat' size='tiny'/>
+const File = ({ file, onRetry }) => {
     const loadingIcon = <Loader active inline size='small'/>
+    const retryButton = (
+        <Button
+            onClick={onRetry}
+            floated='right'
+            icon='repeat'
+            size='tiny'
+        />
+    )
 
     let primary = <Icon name='checkmark' color='teal' size='large'/>
     let secondary = null
@@ -126,27 +133,32 @@ const File = ({ file }) => {
 
 const FileList = (props) => {
     const failedFiles = props.files.filter(f => f.failed)
-    const succeededFiles = props.files.filter(f => f.succeeded)
+    const succeededFiles = props.files.filter(f => f.uploaded)
     const inProgressFiles = props.files.filter(f => f.uploading)
 
-    let fileList = []
-    if (props.showUploaded) {
-        fileList = fileList.concat(succeededFiles)
-    }
-    if (props.showInProgress) {
-        fileList = fileList.concat(inProgressFiles)
-    }
-    if (props.showFailed) {
-        fileList = fileList.concat(failedFiles)
-    }
+let fileList = []
+if (props.showUploaded) {
+    fileList = fileList.concat(succeededFiles)
+}
+if (props.showInProgress) {
+    fileList = fileList.concat(inProgressFiles)
+}
+if (props.showFailed) {
+    fileList = fileList.concat(failedFiles)
+}
 
-    const defaultContent = (
-        <Segment textAlign='center' secondary>
-            No files to show. Select files for upload or modify filters.
-        </Segment>
-    )
+const defaultContent = (
+    <Segment textAlign='center' secondary>
+        No files to show. Select files for upload or modify filters.
+    </Segment>
+)
 
-    const fileRows = fileList.map(f => <File file={f} /> )
+    const fileRows = fileList.map(f => (
+        <File
+            file={f}
+            onRetry={() => props.onFileRetry(f)}
+        />
+    ))
 
     const headerProps = {
         ...props,

@@ -16,7 +16,6 @@ const filesReducer = createReducer({
                 filename: action.file.name,
                 data: action.file,
                 uri: '',
-                succeeded: false,
                 failed: false,
                 uploaded: false,
                 uploading: false,
@@ -27,7 +26,6 @@ const filesReducer = createReducer({
     [FILE_UPLOADED]: (state, action) => (
         updateArrayVals(state, action.id, {
             uri: action.uri,
-            succeeded: true,
             uploaded: true,
             uploading: false,
             failed: false,
@@ -37,6 +35,7 @@ const filesReducer = createReducer({
     [FILE_UPLOADING]: (state, action) => (
         updateArrayVals(state, action.id, {
             uploading: true,
+            failed: false,
         })
     ),
 
