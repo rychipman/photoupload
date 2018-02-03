@@ -23,7 +23,7 @@ const makeActionCreator = (type, ...argNames) => (
 )
 
 export const retryUploadFile = makeActionCreator(RETRY_UPLOAD_FILE, 'id', 'file')
-export const fileUploaded = makeActionCreator(FILE_UPLOADED, 'id', 'uri')
+export const fileUploaded = makeActionCreator(FILE_UPLOADED, 'id', 'hash')
 export const fileUploading = makeActionCreator(FILE_UPLOADING, 'id')
 export const fileUploadFailed = makeActionCreator(FILE_UPLOAD_FAILED, 'id')
 export const closeNotification = makeActionCreator(CLOSE_NOTIFICATION, 'id')

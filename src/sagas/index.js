@@ -26,7 +26,7 @@ function* uploadFile(action) {
         const res = yield call(api.upload, action.file)
         if (res.success) {
             console.log(res)
-            yield put(fileUploaded(action.id, res.data.thumb))
+            yield put(fileUploaded(action.id, res.data.hash))
         } else {
             console.log(res)
             yield put(fileUploadFailed(action.id))

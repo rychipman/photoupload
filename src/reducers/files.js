@@ -25,7 +25,7 @@ const filesReducer = createReducer({
 
     [FILE_UPLOADED]: (state, action) => (
         updateArrayVals(state, action.id, {
-            uri: action.uri,
+            uri: 'http://localhost:8080/img/' + action.hash,
             uploaded: true,
             uploading: false,
             failed: false,
