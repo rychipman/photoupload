@@ -15,6 +15,7 @@ import 'semantic-ui-css/semantic.min.css'
 import Login from './auth/Login.js'
 import Signup from './auth/Signup.js'
 import Uploader from './uploader'
+import Notifications from './notifications/Notifications.js'
 import defaultSaga from './sagas'
 
 const initialState = {
@@ -29,11 +30,9 @@ const initialState = {
             },
         },
         login: {
-            error: '',
             inProgress: false,
         },
         signup: {
-            error: '',
             inProgress: false,
         },
     },
@@ -62,6 +61,7 @@ const App = () => (
     <Provider store={store}>
         <ConnectedRouter history={history}>
             <div style={{height: '100%'}}>
+                <Notifications/>
                 <Route path='/upload' component={Uploader}/>
                 <Route path='/login' component={Login}/>
                 <Route path='/signup' component={Signup}/>

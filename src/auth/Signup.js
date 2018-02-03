@@ -25,18 +25,17 @@ const SignupComponent = (props) => (
 
 const mapStateToProps = (state) => ({
 
-    error: state.ui.signup.error !== '',
     inProgress: state.ui.signup.inProgress,
 
-    errorPrimary: 'Signup Failed',
-    errorSecondary: state.ui.signup.error !== ''
-                    ? state.ui.signup.error
-                    : 'This is the error message.',
+    error: false,
+    errorPrimary: 'Error header',
+    errorSecondary: 'This is the error message.',
 
-
+    warning: false,
     warningPrimary: 'Warning header',
     warningSecondary: 'This is the warning message.',
 
+    success: false,
     successPrimary: 'Success header',
     successSecondary: 'This is the success message.',
 

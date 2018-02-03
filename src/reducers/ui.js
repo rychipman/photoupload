@@ -9,22 +9,22 @@ import {
     LOGIN,
     LOGIN_FAILED,
     LOGIN_SUCCESSFUL,
-    LOGIN_CLEAR_MESSAGES,
     SIGNUP,
     SIGNUP_FAILED,
     SIGNUP_SUCCESSFUL,
-    SIGNUP_CLEAR_MESSAGES,
 } from '../actions';
 
 const notificationsReducer = createReducer({
 
     [CREATE_NOTIFICATION]: (state, action) => (
         [
-            ...state,
             {
                 id: action.id,
+                title: action.title,
                 message: action.message,
+                purpose: action.purpose,
             },
+            ...state,
         ]
     ),
 
@@ -65,28 +65,18 @@ const loginReducer = createReducer({
 
     [LOGIN]: (state, action) => (
         update(state, {
-            error: '',
             inProgress: true,
         })
     ),
 
     [LOGIN_FAILED]: (state, action) => (
         update(state, {
-            error: action.message,
             inProgress: false,
         })
     ),
 
     [LOGIN_SUCCESSFUL]: (state, action) => (
         update(state, {
-            error: '',
-            inProgress: false,
-        })
-    ),
-
-    [LOGIN_CLEAR_MESSAGES]: (state, action) => (
-        update(state, {
-            error: '',
             inProgress: false,
         })
     ),
@@ -97,28 +87,18 @@ const signupReducer = createReducer({
 
     [SIGNUP]: (state, action) => (
         update(state, {
-            error: '',
             inProgress: true,
         })
     ),
 
     [SIGNUP_FAILED]: (state, action) => (
         update(state, {
-            error: action.message,
             inProgress: false,
         })
     ),
 
     [SIGNUP_SUCCESSFUL]: (state, action) => (
         update(state, {
-            error: '',
-            inProgress: false,
-        })
-    ),
-
-    [SIGNUP_CLEAR_MESSAGES]: (state, action) => (
-        update(state, {
-            error: '',
             inProgress: false,
         })
     ),

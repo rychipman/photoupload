@@ -24,21 +24,17 @@ export const TOGGLE_QUEUED_LIST = 'TOGGLE_QUEUED_LIST'
 export const SIGNUP = 'SIGNUP'
 export const SIGNUP_FAILED = 'SIGNUP_FAILED'
 export const SIGNUP_SUCCESSFUL = 'SIGNUP_SUCCESSFUL'
-export const SIGNUP_CLEAR_MESSAGES = 'SIGNUP_CLEAR_MESSAGES'
 export const signup = makeActionCreator(SIGNUP, 'email', 'password')
 export const signupFailed = makeActionCreator(SIGNUP_FAILED, 'message')
 export const signupSuccessful = makeActionCreator(SIGNUP_SUCCESSFUL)
-export const signupClearMessages = makeActionCreator(SIGNUP_CLEAR_MESSAGES)
 
 // Actions and action creators for the login flow
 export const LOGIN = 'LOGIN'
 export const LOGIN_FAILED = 'LOGIN_FAILED'
 export const LOGIN_SUCCESSFUL = 'LOGIN_SUCCESSFUL'
-export const LOGIN_CLEAR_MESSAGES = 'LOGIN_CLEAR_MESSAGES'
 export const login = makeActionCreator(LOGIN, 'email', 'password')
 export const loginFailed = makeActionCreator(LOGIN_FAILED, 'message')
 export const loginSuccessful = makeActionCreator(LOGIN_SUCCESSFUL, 'email', 'token')
-export const loginClearMessages = makeActionCreator(LOGIN_CLEAR_MESSAGES)
 
 // Actions and action creators for situations with insufficient auth
 export const AUTH_TOKEN_REJECTED = 'AUTH_TOKEN_REJECTED'
@@ -50,12 +46,14 @@ export const pageNeedsAuth = makeActionCreator(PAGE_NEEDS_AUTH)
 export const CREATE_NOTIFICATION = 'CREATE_NOTIFICATION'
 export const CLOSE_NOTIFICATION = 'CLOSE_NOTIFICATION'
 let nextNotificationId = 0
-export const createNotification = (message) => {
+export const createNotification = (title, message, purpose) => {
     const id = nextNotificationId++
     return {
         type: CREATE_NOTIFICATION,
         id,
+        title,
         message,
+        purpose,
     }
 }
 export const closeNotification = makeActionCreator(CLOSE_NOTIFICATION, 'id')

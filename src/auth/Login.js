@@ -25,17 +25,17 @@ const LoginComponent = (props) => (
 
 const mapStateToProps = (state) => ({
 
-    error: state.ui.login.error !== '',
     inProgress: state.ui.login.inProgress,
 
-    errorPrimary: 'Login Failed',
-    errorSecondary: state.ui.login.error !== ''
-                    ? state.ui.login.error
-                    : 'This is the error message.',
+    error: false,
+    errorPrimary: 'Error header',
+    errorSecondary: 'This is the error message.',
 
+    warning: false,
     warningPrimary: 'Warning header',
     warningSecondary: 'This is the warning message.',
 
+    success: false,
     successPrimary: 'Success header',
     successSecondary: 'This is the success message.',
 

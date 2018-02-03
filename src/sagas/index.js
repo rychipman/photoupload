@@ -4,24 +4,22 @@ import api from '../api'
 import {
     SIGNUP,
     SIGNUP_FAILED,
-    SIGNUP_SUCCEEDED,
-    SIGNUP_CLEAR_MESSAGES,
+    SIGNUP_SUCCESSFUL,
     signupSuccessful,
     signupFailed,
 } from '../actions'
 import {
     LOGIN,
     LOGIN_FAILED,
-    LOGIN_SUCCEEDED,
-    LOGIN_CLEAR_MESSAGES,
+    LOGIN_SUCCESSFUL,
     loginSuccessful,
     loginFailed,
 } from '../actions'
 import {
     PAGE_NEEDS_AUTH,
     RETRY_UPLOAD_FILE,
-    SIGN_UP,
     UPLOAD_FILE,
+    FILE_UPLOAD_FAILED,
     authTokenRejected,
     createNotification,
     fileUploadFailed,
@@ -77,7 +75,6 @@ function* uploadFile(action) {
         yield put(fileUploaded(action.id, res.data.hash))
     } else {
         yield put(fileUploadFailed(action.id))
-        yield put(createNotification('upload failed'))
     }
 }
 
@@ -122,11 +119,46 @@ function* handleRedirect(action) {
 function* handleNotify(action) {
     switch (action.type) {
     case SIGNUP_FAILED:
-        yield put(createNotification('Signup Failed: ' + action.message))
+        yield put(createNotification(
+            'Signup Failed',
+            action.message,
+            'error',
+        ))
+        return
+    case SIGNUP_SUCCESSFUL:
+        yield put(createNotification(
+            'Signup Successful',
+            'Now log in with your new account.',
+            'success',
+        ))
         return
     case LOGIN_FAILED:
-        yield put(createNotification('Login Failed: ' + action.message))
+        yield put(createNotification(
+            'Login Failed',
+            action.message,
+            'error',
+        ))
         return
+    case LOGIN_SUCCESSFUL:
+        yield put(createNotification(
+            'Login Successful',
+            'Time to start uploading photos!',
+            'success',
+        ))
+        return
+    case FILE_UPLOAD_FAILED:
+        yield put(createNotification(
+            'Upload Failed',
+            'Upload failed for unspecified reason.',
+            'error',
+        ))
+        return
+    case PAGE_NEEDS_AUTH:
+        yield put(createNotification(
+            'Not Logged In',
+            'You need to be logged in to access that page. Sign in and then try again.',
+            'warning',
+        ))
     default:
         // do nothing
     }
