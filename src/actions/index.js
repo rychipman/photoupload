@@ -1,8 +1,4 @@
-export const ADD_FILE = 'ADD_FILE'
-export const REMOVE_FILE = 'REMOVE_FILE'
 export const UPLOAD_FILE = 'UPLOAD_FILE'
-
-export const DISMISS_FILE_SUCCESS = 'DISMISS_FILE_SUCCESS'
 
 export const FILE_UPLOADED = 'FILE_UPLOADED'
 export const FILE_UPLOADING = 'FILE_UPLOADING'
@@ -25,9 +21,6 @@ const makeActionCreator = (type, ...argNames) => (
   }
 )
 
-export const removeFile = makeActionCreator(REMOVE_FILE, 'id')
-export const dismissFileSuccess = makeActionCreator(DISMISS_FILE_SUCCESS, 'id')
-export const uploadFile = makeActionCreator(UPLOAD_FILE, 'id', 'file')
 export const fileUploaded = makeActionCreator(FILE_UPLOADED, 'id', 'uri')
 export const fileUploading = makeActionCreator(FILE_UPLOADING, 'id')
 export const fileUploadFailed = makeActionCreator(FILE_UPLOAD_FAILED, 'id')
@@ -37,12 +30,11 @@ export const toggleFailedList = makeActionCreator(TOGGLE_FAILED_LIST)
 export const toggleQueuedList = makeActionCreator(TOGGLE_QUEUED_LIST)
 
 let nextFileId = 0;
-export const addFile = (file) => (
+export const uploadFile = (file) => (
     {
-        type: ADD_FILE,
+        type: UPLOAD_FILE,
         id: nextFileId++,
-        filename: file.name,
-        data: file,
+        file: file,
     }
 )
 

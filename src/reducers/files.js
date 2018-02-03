@@ -1,8 +1,6 @@
 import { createReducer, updateArrayVals } from './util'
 import {
-    ADD_FILE,
-    REMOVE_FILE,
-    DISMISS_FILE_SUCCESS,
+    UPLOAD_FILE,
     FILE_UPLOADED,
     FILE_UPLOADING,
     FILE_UPLOAD_FAILED,
@@ -10,13 +8,13 @@ import {
 
 const filesReducer = createReducer({
 
-    [ADD_FILE]: (state, action) => (
+    [UPLOAD_FILE]: (state, action) => (
         [
             ...state,
             {
                 id: action.id,
-                filename: action.filename,
-                data: action.data,
+                filename: action.file.name,
+                data: action.file,
                 uri: '',
                 succeeded: false,
                 failed: false,
@@ -24,16 +22,6 @@ const filesReducer = createReducer({
                 uploading: false,
             }
         ]
-    ),
-
-    [REMOVE_FILE]: (state, action) => (
-        state.filter(f => f.id !== action.id)
-    ),
-
-    [DISMISS_FILE_SUCCESS]: (state, action) => (
-        updateArrayVals(state, action.id, {
-            succeeded: false,
-        })
     ),
 
     [FILE_UPLOADED]: (state, action) => (
