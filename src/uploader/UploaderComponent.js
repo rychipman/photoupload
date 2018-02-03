@@ -93,38 +93,29 @@ const UploaderHeader = (props) => {
 }
 
 const File = ({ file }) => {
-    const retryButton = <Button floated='right' icon='refresh' size='tiny'/>
-    const loadingIcon = (
-        <Button floated='right' size='tiny' disabled>
-            <Loader active inline size='mini'/>
-        </Button>
-    )
+    const retryButton = <Button floated='right' icon='repeat' size='tiny'/>
+    const loadingIcon = <Loader active inline size='small'/>
 
+    let primary = <Icon name='checkmark' color='teal' size='large'/>
     let secondary = null
-    let secondaryText = ''
-    let secondaryIcon = null
 
     if (file.failed) {
-        secondaryText = 'retry upload'
-        secondaryIcon = retryButton
-    } else if (file.uploading) {
-        secondaryIcon = loadingIcon
-    }
-
-    if (secondaryIcon) {
+        primary = <Icon name='remove' color='red' size='large'/>
         secondary = (
             <Popup
-                trigger={secondaryIcon}
-                content={secondaryText}
+                trigger={retryButton}
+                content='retry upload'
                 size='tiny'
                 position='left center'
             />
         )
+    } else if (file.uploading) {
+        primary = loadingIcon
     }
 
     return (
         <Segment key={file.id} textAlign='left' clearing>
-            <Icon name='image' circular color='teal'/>
+            {primary}
             <span style={{marginLeft: '13px'}}>
                 {file.filename}
             </span>
