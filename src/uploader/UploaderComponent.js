@@ -53,6 +53,7 @@ const FilterSelector = ({ filters, floated }) => {
         <Button.Group size='tiny' floated={floated}>
         {filters.map(f => (
             <Popup
+                key={f.name}
                 content={buildPopupText(f)}
                 trigger={buildButton(f)}
                 position='bottom center'
@@ -155,6 +156,7 @@ const defaultContent = (
 
     const fileRows = fileList.map(f => (
         <File
+            key={f.id}
             file={f}
             onRetry={() => props.onFileRetry(f)}
         />
