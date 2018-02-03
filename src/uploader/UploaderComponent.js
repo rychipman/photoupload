@@ -3,6 +3,7 @@ import {
     Button,
     Grid,
     Icon,
+    Loader,
     Popup,
     Segment,
 } from 'semantic-ui-react'
@@ -65,19 +66,19 @@ const FilterSelector = ({ filters, floated }) => {
 const UploaderHeader = (props) => {
     const filters = [
         {
-            name: 'In Progress',
+            name: 'In Progress (' + props.numInProgress + ')',
             subject: 'ongoing uploads',
             active: props.showInProgress,
             onClick: props.inProgressListToggle,
         },
         {
-            name: 'Succeeded',
+            name: 'Succeeded (' + props.numSucceeded + ')',
             subject: 'successful uploads',
             active: props.showUploaded,
             onClick: props.uploadedListToggle,
         },
         {
-            name: 'Failed',
+            name: 'Failed (' + props.numFailed + ')',
             subject: 'failed uploads',
             active: props.showFailed,
             onClick: props.failedListToggle,
@@ -91,34 +92,83 @@ const UploaderHeader = (props) => {
     )
 }
 
-const File = ({ file, action }) => (
-    <Segment key={file.id} textAlign='left' clearing>
-        <Icon name='image' circular color='teal'/>
-        <span style={{marginLeft: '13px'}}>
-            {file.filename}
-        </span>
-        <Popup
-            trigger={action}
-            content='delete this file'
-            size='tiny'
-            position='left center'
-        />
-    </Segment>
-)
+const File = ({ file }) => {
+    const retryButton = <Button floated='right' icon='refresh' size='tiny'/>
+    const loadingIcon = (
+        <Button floated='right' size='tiny' disabled>
+            <Loader active inline size='mini'/>
+        </Button>
+    )
+
+    let secondary = null
+    let secondaryText = ''
+    let secondaryIcon = null
+
+    if (file.failed) {
+        secondaryText = 'retry upload'
+        secondaryIcon = retryButton
+    } else if (file.uploading) {
+        secondaryIcon = loadingIcon
+    }
+
+    if (secondaryIcon) {
+        secondary = (
+            <Popup
+                trigger={secondaryIcon}
+                content={secondaryText}
+                size='tiny'
+                position='left center'
+            />
+        )
+    }
+
+    return (
+        <Segment key={file.id} textAlign='left' clearing>
+            <Icon name='image' circular color='teal'/>
+            <span style={{marginLeft: '13px'}}>
+                {file.filename}
+            </span>
+            {secondary}
+        </Segment>
+    )
+}
 
 const FileList = (props) => {
-    const button = <Button floated='right' icon='trash' size='tiny'/>
-    const fileList = props.files.map(f => <File file={f} action={button} /> )
+    const failedFiles = props.files.filter(f => f.failed)
+    const succeededFiles = props.files.filter(f => f.succeeded)
+    const inProgressFiles = props.files.filter(f => f.uploading)
+
+    let fileList = []
+    if (props.showUploaded) {
+        fileList = fileList.concat(succeededFiles)
+    }
+    if (props.showInProgress) {
+        fileList = fileList.concat(inProgressFiles)
+    }
+    if (props.showFailed) {
+        fileList = fileList.concat(failedFiles)
+    }
+
     const defaultContent = (
         <Segment textAlign='center' secondary>
             No files to show. Select files for upload or modify filters.
         </Segment>
     )
+
+    const fileRows = fileList.map(f => <File file={f} /> )
+
+    const headerProps = {
+        ...props,
+        numSucceeded: succeededFiles.length,
+        numFailed: failedFiles.length,
+        numInProgress: inProgressFiles.length,
+    }
+
     return (
         <Segment.Group>
-            <UploaderHeader {...props}/>
-            { fileList.length > 0
-              ? fileList
+            <UploaderHeader {...headerProps}/>
+            { fileRows.length > 0
+              ? fileRows
               : defaultContent }
         </Segment.Group>
     )
