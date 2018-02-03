@@ -123,7 +123,7 @@ const FileList = (props) => {
         </Segment.Group>
     )
 }
-const UploadLayout = (props) => {
+const UploaderComponent = (props) => {
     const containerStyle = {
         padding: '20px',
         height: '100%',
@@ -142,4 +142,4 @@ const UploadLayout = (props) => {
     )
 }
 
-export default UploadLayout
+export default UploaderComponent

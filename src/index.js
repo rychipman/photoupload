@@ -12,9 +12,9 @@ import 'typeface-roboto'
 import 'semantic-ui-css/semantic.min.css'
 
 import LoginPage from './layouts/LoginLayout.js'
-import UploadPage from './layouts/UploadPage.js'
 import AppLayout from './layouts/AppLayout'
 import Upload from './upload'
+import Uploader from './uploader'
 import Notifications from './notifications'
 import defaultSaga from './sagas'
 
@@ -56,7 +56,7 @@ const App = () => (
             <div style={{height: '100%'}}>
                 <Route path='/photos' component={MainPage}/>
                 <Route path='/login' component={LoginPage}/>
-                <Route path='/upload' component={UploadPage}/>
+                <Route path='/upload' component={Uploader}/>
             </div>
         </Router>
     </Provider>

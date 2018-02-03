@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import UploadLayout from './UploadLayout.js'
+import UploaderComponent from './UploaderComponent.js'
 import {
     addFile,
     toggleUploadedList,
@@ -21,9 +21,9 @@ const mapDispatchToProps = (dispatch) => ({
     inProgressListToggle: () => dispatch(toggleQueuedList()),
 })
 
-const UploadPage = connect(
+const UploaderContainer = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(UploadLayout)
+)(UploaderComponent)
 
-export default UploadPage
+export default UploaderContainer
