@@ -6,7 +6,6 @@ import Login from '../layouts/LoginLayout.js'
 const loginDimmer = ({ active }) => (
     <Dimmer
         page
-        blurring
         inverted
         active={active}
         content={<Login/>}
