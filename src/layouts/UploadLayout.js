@@ -41,6 +41,7 @@ const FilterSelector = ({ filters, floated }) => {
         <Button
             content={filter.name}
             active={filter.active}
+            onClick={filter.onClick}
         />
     )
     const buildPopupText = (filter) => {
@@ -61,15 +62,30 @@ const FilterSelector = ({ filters, floated }) => {
     )
 }
 
-const UploaderHeader = ({ onFileAdd }) => {
+const UploaderHeader = (props) => {
     const filters = [
-        {name: 'In Progress', subject: 'ongoing uploads', active: true},
-        {name: 'Succeeded', subject: 'successful uploads', active: false},
-        {name: 'Failed', subject: 'failed uploads', active: false},
+        {
+            name: 'In Progress',
+            subject: 'ongoing uploads',
+            active: props.showInProgress,
+            onClick: props.inProgressListToggle,
+        },
+        {
+            name: 'Succeeded',
+            subject: 'successful uploads',
+            active: props.showUploaded,
+            onClick: props.uploadedListToggle,
+        },
+        {
+            name: 'Failed',
+            subject: 'failed uploads',
+            active: props.showFailed,
+            onClick: props.failedListToggle,
+        },
     ]
     return (
         <Segment clearing textAlign='left'>
-            <UploadButton onFileAdd={onFileAdd}/>
+            <UploadButton onFileAdd={props.onFileAdd}/>
             <FilterSelector filters={filters} floated='right'/>
         </Segment>
     )
@@ -90,9 +106,9 @@ const File = ({ file, action }) => (
     </Segment>
 )
 
-const FileList = ({ files, onFileAdd }) => {
+const FileList = (props) => {
     const button = <Button floated='right' icon='trash' size='tiny'/>
-    const fileList = files.map(f => <File file={f} action={button} /> )
+    const fileList = props.files.map(f => <File file={f} action={button} /> )
     const defaultContent = (
         <Segment textAlign='center' secondary>
             No files to show. Select files for upload or modify filters.
@@ -100,14 +116,14 @@ const FileList = ({ files, onFileAdd }) => {
     )
     return (
         <Segment.Group>
-            <UploaderHeader onFileAdd={onFileAdd}/>
+            <UploaderHeader {...props}/>
             { fileList.length > 0
               ? fileList
               : defaultContent }
         </Segment.Group>
     )
 }
-const UploadLayout = ({ files, onFileAdd }) => {
+const UploadLayout = (props) => {
     const containerStyle = {
         padding: '20px',
         height: '100%',
@@ -118,7 +134,7 @@ const UploadLayout = ({ files, onFileAdd }) => {
             <Grid textAlign='center' verticalAlign='top'>
                 <Grid.Row>
                     <Grid.Column width={10}>
-                        <FileList files={files} onFileAdd={onFileAdd}/>
+                        <FileList {...props}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
