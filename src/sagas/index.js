@@ -1,4 +1,5 @@
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
+import api from '../api'
 import {
     UPLOAD_FILE,
     RETRY_UPLOAD_FILE,
@@ -13,38 +14,49 @@ import {
     authFailed,
 } from '../actions'
 
-const api = {}
-api.upload = (file) => {
-    const token = localStorage.getItem('jwtToken')
-    console.log('sending api request with token: ' + token)
-    const formData = new FormData()
-    formData.append('file', file)
-    return fetch('http://localhost:8080/upload', {
-        method: 'POST',
-        headers: new Headers({
-            'Authorization': `Bearer ${token}`,
-        }),
-        body: formData,
-    }).then(res => {
-        if (res.ok) {
-            return res.json()
+function* processApiResult(res) {
+    if (res.ok) {
+        try {
+            const data = yield call(() => res.json())
+            return {
+                ok: true,
+                token: data.token,
+            }
+        } catch(e) {
+            return {
+                ok: false,
+                message: 'failed to parse json from result: ' + e.message,
+            }
         }
-        throw new Error('response was not ok')
-    }).then(json => ({
-        ok: true,
-        hash: json.hash,
-    })).catch(e => (
-        Promise.resolve({
+    }
+
+    if (res.status === 401) {
+        yield put(authFailed())
+    }
+
+    return {
+        ok: false,
+        message: res.status + ' ' + res.statusText,
+    }
+}
+
+function* apiCall(name, ...args) {
+    try {
+        const token = yield select(state => state.auth.token)
+        const res = yield call(api[name], token, ...args)
+        const data = yield* processApiResult(res)
+        return data
+    } catch(e) {
+        return {
             ok: false,
-            message: e.message,
-        })
-    ))
+            message: 'api call failed: ' + e.message,
+        }
+    }
 }
 
 function* uploadFile(action) {
     yield put(fileUploading(action.id))
-    const res = yield call(api.upload, action.file)
-    console.log(res)
+    const res = yield call(apiCall, 'upload', action.file)
     if (res.ok) {
         yield put(fileUploaded(action.id, res.hash))
     } else {
@@ -53,40 +65,11 @@ function* uploadFile(action) {
     }
 }
 
-api.getToken = (email, password) => {
-    return fetch('http://localhost:8080/token', {
-        method: 'POST',
-        headers: new Headers({
-            'Content-Type': 'application/json',
-        }),
-        body: JSON.stringify({
-            email,
-            password,
-        }),
-    }).then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        throw new Error('response was not ok')
-    }).then(json => ({
-        ok: true,
-        token: json.token,
-    })).catch(e => (
-        Promise.resolve({
-            ok: false,
-            message: e.message,
-        })
-    ))
-}
-
 function* login(action) {
-    const res = yield call(api.getToken, action.email, action.password)
+    const res = yield call(apiCall, 'getToken', action.email, action.password)
     if (res.ok) {
-        console.log(res.token)
-        localStorage.setItem('jwtToken', res.token)
         yield put(updateToken(res.token))
     } else {
-        console.log('auth failed: ' + res.message)
         yield put(authFailed())
     }
 }
