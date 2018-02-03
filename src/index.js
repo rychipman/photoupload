@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { persistStore, persistReducer } from 'redux-persist'
+import { createTransform, persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 
@@ -54,10 +54,20 @@ const router = routerMiddleware(history)
 
 const middleware = [ router, saga ]
 
+const fileTransform = createTransform(
+    (inboundState) => inboundState,
+    (outboundState) => outboundState.filter(f => f.uploaded),
+    { whitelist: 'files' },
+)
+
 const persistedReducer = persistReducer({
     key: 'root',
     storage: storage,
     whitelist: ['auth', 'files'],
+    debug: true,
+    transforms: [
+        fileTransform,
+    ],
 }, rootReducer)
 
 let store = createStore(
