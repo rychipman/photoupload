@@ -12,7 +12,7 @@ import 'typeface-roboto'
 import 'semantic-ui-css/semantic.min.css'
 
 import LoginPage from './layouts/LoginLayout.js'
-import UploadPage from './layouts/UploadLayout.js'
+import UploadPage from './layouts/UploadPage.js'
 import AppLayout from './layouts/AppLayout'
 import Upload from './upload'
 import Notifications from './notifications'
