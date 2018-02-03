@@ -7,12 +7,12 @@ import rootReducer from './reducers/'
 import React from 'react'
 import { render } from 'react-dom'
 import { Route, BrowserRouter as Router } from 'react-router-dom'
-import Reboot from 'material-ui/Reboot'
 
 import 'typeface-roboto'
 import 'semantic-ui-css/semantic.min.css'
 
 import LoginPage from './layouts/LoginLayout.js'
+import UploadPage from './layouts/UploadLayout.js'
 import AppLayout from './layouts/AppLayout'
 import Upload from './upload'
 import Notifications from './notifications'
@@ -43,17 +43,21 @@ let store = createStore(
 
 saga.run(defaultSaga)
 
-const MainView = () => (
+const MainPage = () => (
     <AppLayout>
-        <Route path='/upload' component={Upload}/>
-        <Route path='/notifications' component={Notifications}/>
+        <Route path='/photos/upload' component={Upload}/>
+        <Route path='/photos/notifications' component={Notifications}/>
     </AppLayout>
 )
 
 const App = () => (
     <Provider store={store}>
         <Router>
-            <Route path='/login' component={LoginPage}/>
+            <div style={{height: '100%'}}>
+                <Route path='/photos' component={MainPage}/>
+                <Route path='/login' component={LoginPage}/>
+                <Route path='/upload' component={UploadPage}/>
+            </div>
         </Router>
     </Provider>
 )

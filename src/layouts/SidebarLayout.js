@@ -40,13 +40,13 @@ const styles = (theme) => ({
 
 const PrimaryList = () => (
     <List>
-        <Link to='/upload' style={{ textDecoration: 'none' }}>
+        <Link to='/photos/upload' style={{ textDecoration: 'none' }}>
             <ListItem button>
             <ListItemIcon><CloudUploadIcon/></ListItemIcon>
             <ListItemText primary='Add Photos'/>
             </ListItem>
         </Link>
-        <Link to='/files' style={{ textDecoration: 'none' }}>
+        <Link to='/photos/files' style={{ textDecoration: 'none' }}>
             <ListItem button>
             <ListItemIcon><PhotoLibraryIcon/></ListItemIcon>
             <ListItemText primary='Uploaded Photos'/>
@@ -57,7 +57,7 @@ const PrimaryList = () => (
 
 const SecondaryList = () => (
     <List>
-        <Link to='/notifications' style={{ textDecoration: 'none' }}>
+        <Link to='/photos/notifications' style={{ textDecoration: 'none' }}>
             <ListItem button>
             <ListItemIcon><MessageIcon/></ListItemIcon>
             <ListItemText primary='Notifications'/>
