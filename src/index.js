@@ -1,6 +1,10 @@
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import { PersistGate } from 'redux-persist/lib/integration/react'
+
 import createSagaMiddleware from 'redux-saga'
 import rootReducer from './reducers/'
 
@@ -50,16 +54,24 @@ const router = routerMiddleware(history)
 
 const middleware = [ router, saga ]
 
+const persistedReducer = persistReducer({
+    key: 'root',
+    storage: storage,
+    whitelist: ['auth', 'files'],
+}, rootReducer)
+
 let store = createStore(
-    rootReducer,
+    persistedReducer,
     initialState,
     composeWithDevTools(applyMiddleware(...middleware)),
 )
 
+const persistor = persistStore(store)
 saga.run(defaultSaga)
 
 const App = () => (
     <Provider store={store}>
+    <PersistGate persistor={persistor} loading={null}>
         <ConnectedRouter history={history}>
             <div style={{height: '100%', paddingTop: '50px'}}>
                 <Menu/>
@@ -69,6 +81,7 @@ const App = () => (
                 <Route path='/signup' component={Signup}/>
             </div>
         </ConnectedRouter>
+    </PersistGate>
     </Provider>
 )
 
