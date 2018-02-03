@@ -1,6 +1,9 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
-
-import { UPLOAD_FILE, RETRY_UPLOAD_FILE } from '../actions'
+import {
+    UPLOAD_FILE,
+    RETRY_UPLOAD_FILE,
+    GET_TOKEN,
+} from '../actions'
 import {
     fileUploaded,
     fileUploading,
@@ -40,9 +43,25 @@ function* uploadFile(action) {
 
 }
 
+api.getToken = (email, password) => {
+    return fetch('http://localhost:8080/token', {
+        method: 'GET',
+    }).then(res => res.json())
+}
+
+function* login(action) {
+    try {
+        const res = yield call(api.getToken, action.email, action.password)
+        console.log(res)
+    } catch(e) {
+        console.log(e)
+    }
+}
+
 function* watch() {
     yield takeEvery(UPLOAD_FILE, uploadFile)
     yield takeEvery(RETRY_UPLOAD_FILE, uploadFile)
+    yield takeEvery(GET_TOKEN, login)
 }
 
 export default watch

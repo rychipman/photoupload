@@ -12,6 +12,8 @@ export const TOGGLE_UPLOADED_LIST = 'TOGGLE_UPLOADED_LIST'
 export const TOGGLE_FAILED_LIST = 'TOGGLE_FAILED_LIST'
 export const TOGGLE_QUEUED_LIST = 'TOGGLE_QUEUED_LIST'
 
+export const GET_TOKEN = 'GET_TOKEN'
+
 const makeActionCreator = (type, ...argNames) => (
   (...args) => {
     let action = { type }
@@ -30,6 +32,7 @@ export const closeNotification = makeActionCreator(CLOSE_NOTIFICATION, 'id')
 export const toggleUploadedList = makeActionCreator(TOGGLE_UPLOADED_LIST)
 export const toggleFailedList = makeActionCreator(TOGGLE_FAILED_LIST)
 export const toggleQueuedList = makeActionCreator(TOGGLE_QUEUED_LIST)
+export const getToken = makeActionCreator(GET_TOKEN, 'email', 'password')
 
 let nextFileId = 0;
 export const uploadFile = (file) => (
