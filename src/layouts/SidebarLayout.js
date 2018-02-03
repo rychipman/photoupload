@@ -13,9 +13,15 @@ import PhotoLibraryIcon from 'material-ui-icons/PhotoLibrary'
 
 const drawerWidth = 240;
 const styles = (theme) => ({
+    root: {
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+    },
     contentFrame: {
         width: '100%',
         height: '100%',
+        position: 'relative',
         paddingLeft: drawerWidth,
     },
     drawerPaper: {
@@ -27,17 +33,20 @@ const styles = (theme) => ({
     drawerContents: {
         position: 'relative',
     },
+    link: {
+        'text-decoration': 'none',
+    },
 })
 
 const PrimaryList = () => (
     <List>
-        <Link to='/upload'>
+        <Link to='/upload' style={{ textDecoration: 'none' }}>
             <ListItem button>
             <ListItemIcon><CloudUploadIcon/></ListItemIcon>
             <ListItemText primary='Add Photos'/>
             </ListItem>
         </Link>
-        <Link to='/files'>
+        <Link to='/files' style={{ textDecoration: 'none' }}>
             <ListItem button>
             <ListItemIcon><PhotoLibraryIcon/></ListItemIcon>
             <ListItemText primary='Uploaded Photos'/>
@@ -48,13 +57,13 @@ const PrimaryList = () => (
 
 const SecondaryList = () => (
     <List>
-        <Link to='/notifications'>
+        <Link to='/notifications' style={{ textDecoration: 'none' }}>
             <ListItem button>
             <ListItemIcon><MessageIcon/></ListItemIcon>
             <ListItemText primary='Notifications'/>
             </ListItem>
         </Link>
-        <Link to='/about'>
+        <Link to='/about' style={{ textDecoration: 'none' }}>
             <ListItem button>
             <ListItemIcon><InfoIcon/></ListItemIcon>
             <ListItemText primary='About'/>
@@ -80,7 +89,7 @@ let Sidebar = ({classes}) => (
 Sidebar = withStyles(styles)(Sidebar)
 
 let SidebarContainer = ({children, classes}) => (
-    <div>
+    <div className={root}>
         <Sidebar/>
         <div className={classes.contentFrame}>
             {children}
