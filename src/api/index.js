@@ -25,7 +25,21 @@ const getToken = (token, email, password) => {
     })
 }
 
+const signup = (token, email, password) => {
+    return fetch('http://localhost:8080/signup', {
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+        }),
+        body: JSON.stringify({
+            email,
+            password,
+        }),
+    })
+}
+
 export default {
     upload,
     getToken,
+    signup,
 }

@@ -10,7 +10,6 @@ const filesReducer = createReducer({
 
     [UPLOAD_FILE]: (state, action) => (
         [
-            ...state,
             {
                 id: action.id,
                 filename: action.file.name,
@@ -19,7 +18,8 @@ const filesReducer = createReducer({
                 failed: false,
                 uploaded: false,
                 uploading: false,
-            }
+            },
+            ...state,
         ]
     ),
 

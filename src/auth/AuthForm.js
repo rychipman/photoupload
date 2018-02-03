@@ -2,12 +2,13 @@ import React, {Component} from 'react'
 import {
     Button,
     Form,
+    Message,
     Segment,
 } from 'semantic-ui-react'
 
-class LoginForm extends Component {
+class AuthForm extends Component {
     state = {
-        email: this.props.email,
+        email: '',
         password: '',
     }
     handleChange = (e, {name, value}) => this.setState({ [name]: value })
@@ -20,16 +21,37 @@ class LoginForm extends Component {
     render() {
         const { email, password } = this.state
         return (
-            <Form size='large'
+            <Form
+                size='large'
                 onSubmit={this.handleSubmit}
-                loading={this.props.loading}
+                loading={this.props.inProgress}
+                error={this.props.error}
+                success={this.props.success}
             >
+              <Message
+                error
+                size='mini'
+                header={this.props.errorPrimary}
+                content={this.props.errorSecondary}
+              />
+              <Message
+                warning
+                size='mini'
+                header={this.props.warningPrimary}
+                content={this.props.warningSecondary}
+              />
+              <Message
+                success
+                size='mini'
+                header={this.props.successPrimary}
+                content={this.props.successSecondary}
+              />
               <Segment stacked>
                 <Form.Input
                   fluid
                   icon='user'
                   iconPosition='left'
-                  placeholder='E-mail address'
+                  placeholder='Email address'
                   name='email'
                   value={email}
                   onChange={this.handleChange}
@@ -46,11 +68,11 @@ class LoginForm extends Component {
                   onChange={this.handleChange}
                   required
                 />
-                <Button color='teal' fluid size='large'>Login</Button>
+                <Button fluid color='teal' size='large'>{this.props.submitText}</Button>
               </Segment>
             </Form>
         )
     }
 }
 
-export default LoginForm
+export default AuthForm

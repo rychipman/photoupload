@@ -6,11 +6,14 @@ import rootReducer from './reducers/'
 
 import React from 'react'
 import { render } from 'react-dom'
-import { Route, BrowserRouter as Router } from 'react-router-dom'
+import { Route } from 'react-router'
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
 
 import 'semantic-ui-css/semantic.min.css'
 
-import { LoginDimmer } from './login'
+import Login from './auth/Login.js'
+import Signup from './auth/Signup.js'
 import Uploader from './uploader'
 import defaultSaga from './sagas'
 
@@ -20,22 +23,32 @@ const initialState = {
         notifications: [],
         uploads: {
             lists: {
-                uploaded: false,
-                failed: false,
+                uploaded: true,
+                failed: true,
                 queued: true,
             },
         },
+        login: {
+            error: '',
+            inProgress: false,
+        },
+        signup: {
+            error: '',
+            inProgress: false,
+        },
     },
     auth: {
-        token: '',
         email: '',
-        loggedIn: false,
-        loggingIn: false,
+        token: '',
     }
 }
 
 const saga = createSagaMiddleware()
-const middleware = [ saga ]
+
+const history = createHistory()
+const router = routerMiddleware(history)
+
+const middleware = [ router, saga ]
 
 let store = createStore(
     rootReducer,
@@ -47,12 +60,13 @@ saga.run(defaultSaga)
 
 const App = () => (
     <Provider store={store}>
-        <Router>
+        <ConnectedRouter history={history}>
             <div style={{height: '100%'}}>
-                <LoginDimmer/>
                 <Route path='/upload' component={Uploader}/>
+                <Route path='/login' component={Login}/>
+                <Route path='/signup' component={Signup}/>
             </div>
-        </Router>
+        </ConnectedRouter>
     </Provider>
 )
 

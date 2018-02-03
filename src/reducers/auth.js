@@ -1,39 +1,35 @@
 import { createReducer } from './util'
 import {
-    GET_TOKEN,
-    UPDATE_TOKEN,
-    AUTH_FAILED,
+    LOGIN,
+    LOGIN_SUCCESSFUL,
+    AUTH_TOKEN_REJECTED,
 } from '../actions';
 
 const authReducer = createReducer({
 
-    [GET_TOKEN]: (state, action) => (
+    [LOGIN]: (state, action) => (
         {
             ...state,
+            email: '',
             token: '',
+        }
+    ),
+
+    [LOGIN_SUCCESSFUL]: (state, action) => (
+        {
+            ...state,
             email: action.email,
-            loggedIn: false,
-            loggingIn: true,
-        }
-    ),
-
-    [UPDATE_TOKEN]: (state, action) => (
-        {
-            ...state,
             token: action.token,
-            loggedIn: true,
-            loggingIn: false,
         }
     ),
 
-    [AUTH_FAILED]: (state, action) => (
+    [AUTH_TOKEN_REJECTED]: (state, action) => (
         {
             ...state,
+            email: '',
             token: '',
-            loggedIn: false,
-            loggingIn: false,
         }
-    )
+    ),
 
 })
 

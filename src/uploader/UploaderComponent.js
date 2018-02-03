@@ -73,7 +73,7 @@ const UploaderHeader = (props) => {
             onClick: props.inProgressListToggle,
         },
         {
-            name: 'Succeeded (' + props.numSucceeded + ')',
+            name: 'Uploaded (' + props.numSucceeded + ')',
             subject: 'successful uploads',
             active: props.showUploaded,
             onClick: props.uploadedListToggle,
@@ -140,26 +140,23 @@ const File = ({ file, onRetry }) => {
 }
 
 const FileList = (props) => {
-    const failedFiles = props.files.filter(f => f.failed)
-    const succeededFiles = props.files.filter(f => f.uploaded)
-    const inProgressFiles = props.files.filter(f => f.uploading)
 
-let fileList = []
-if (props.showUploaded) {
-    fileList = fileList.concat(succeededFiles)
-}
-if (props.showInProgress) {
-    fileList = fileList.concat(inProgressFiles)
-}
-if (props.showFailed) {
-    fileList = fileList.concat(failedFiles)
-}
+    let fileList = props.files.filter(f => {
+        if (f.failed) {
+            return props.showFailed
+        } else if (f.uploaded) {
+            return props.showUploaded
+        } else if (f.uploading) {
+            return props.showInProgress
+        }
+        return true
+    })
 
-const defaultContent = (
-    <Segment textAlign='center' secondary>
-        No files to show. Select files for upload or modify filters.
-    </Segment>
-)
+    const defaultContent = (
+        <Segment textAlign='center' secondary>
+            No files to show. Select files for upload or modify filters.
+        </Segment>
+    )
 
     const fileRows = fileList.map(f => (
         <File
@@ -171,9 +168,9 @@ const defaultContent = (
 
     const headerProps = {
         ...props,
-        numSucceeded: succeededFiles.length,
-        numFailed: failedFiles.length,
-        numInProgress: inProgressFiles.length,
+        numSucceeded: props.files.filter(f => f.uploaded).length,
+        numFailed: props.files.filter(f => f.failed).length,
+        numInProgress: props.files.filter(f => f.uploading).length,
     }
 
     return (
