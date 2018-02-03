@@ -104,7 +104,7 @@ const File = ({ file, onRetry }) => {
         />
     )
 
-    let primary = <Icon name='checkmark' color='teal' size='large'/>
+    let primary = null
     let secondary = null
 
     if (file.failed) {
@@ -119,6 +119,13 @@ const File = ({ file, onRetry }) => {
         )
     } else if (file.uploading) {
         primary = loadingIcon
+    } else if (file.uploaded) {
+        primary = <Icon name='checkmark' color='teal' size='large'/>
+        secondary = (
+            <a href={file.uri}>
+                <Button floated='right' icon='external' size='tiny' />
+            </a>
+        )
     }
 
     return (
