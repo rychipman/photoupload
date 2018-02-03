@@ -1,5 +1,6 @@
 import { createReducer, updateArrayVals } from './util'
 import {
+    LOGIN,
     ADD_FILE,
     UPLOAD_FILE,
     UPLOAD_FILE_FAILED,
@@ -7,6 +8,8 @@ import {
 } from '../actions';
 
 const filesReducer = createReducer({
+
+    [LOGIN]: (state, action) => [],
 
     [ADD_FILE]: (state, action) => (
         [

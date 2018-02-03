@@ -25,6 +25,7 @@ import {
     uploadFileFailed,
 } from '../actions'
 import {
+    AUTH_TOKEN_REJECTED,
     PAGE_NEEDS_AUTH,
     pageNeedsAuth,
     authTokenRejected,
@@ -90,6 +91,14 @@ function* handleRedirect(action) {
 
 function* handleNotify(action) {
     switch (action.type) {
+    case AUTH_TOKEN_REJECTED:
+        yield put(createNotification(
+            'Session Expired',
+            'You have been logged out due to inactivity. '
+              + 'Please login again to continue',
+            'warning',
+        ))
+        return
     case SIGNUP_FAILED:
         yield put(createNotification(
             'Signup Failed',
@@ -119,11 +128,15 @@ function* handleNotify(action) {
         ))
         return
     case UPLOAD_FILE_FAILED:
-        yield put(createNotification(
-            'Upload Failed',
-            action.message,
-            'error',
-        ))
+        if (action.message.includes('Token is expired')) {
+            yield put(authTokenRejected())
+        } else {
+            yield put(createNotification(
+                'Upload Failed',
+                action.message,
+                'error',
+            ))
+        }
         return
     case PAGE_NEEDS_AUTH:
         yield put(createNotification(
@@ -143,7 +156,7 @@ function* watch() {
     yield takeEvery(LOGIN, handleLogin)
     yield takeEvery(SIGNUP, handleSignup)
     yield takeEvery(LOCATION_CHANGE, handleNavigate)
-    yield takeEvery(PAGE_NEEDS_AUTH, handleRedirect)
+    yield takeEvery([ PAGE_NEEDS_AUTH, AUTH_TOKEN_REJECTED ], handleRedirect)
     yield takeEvery('*', handleNotify)
 }
 
