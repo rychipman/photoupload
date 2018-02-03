@@ -7,19 +7,23 @@ import {
 
 class LoginForm extends Component {
     state = {
-        email: '',
+        email: this.props.email,
         password: '',
     }
     handleChange = (e, {name, value}) => this.setState({ [name]: value })
     handleSubmit = () => {
         const { email, password } = this.state
+        this.setState({ password: '' })
         this.props.onSubmit(email, password)
     }
 
     render() {
         const { email, password } = this.state
         return (
-            <Form size='large' onSubmit={this.handleSubmit}>
+            <Form size='large'
+                onSubmit={this.handleSubmit}
+                loading={this.props.loading}
+            >
               <Segment stacked>
                 <Form.Input
                   fluid

@@ -26,6 +26,12 @@ const initialState = {
             },
         },
     },
+    auth: {
+        token: '',
+        email: '',
+        loggedIn: false,
+        loggingIn: false,
+    }
 }
 
 const saga = createSagaMiddleware()

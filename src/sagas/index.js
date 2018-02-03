@@ -9,6 +9,8 @@ import {
     fileUploading,
     fileUploadFailed,
     createNotification,
+    updateToken,
+    authFailed,
 } from '../actions'
 
 const api = {}
@@ -53,8 +55,10 @@ function* login(action) {
     try {
         const res = yield call(api.getToken, action.email, action.password)
         console.log(res)
+        yield put(updateToken(res.token))
     } catch(e) {
         console.log(e)
+        yield put(authFailed())
     }
 }
 

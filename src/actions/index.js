@@ -13,6 +13,8 @@ export const TOGGLE_FAILED_LIST = 'TOGGLE_FAILED_LIST'
 export const TOGGLE_QUEUED_LIST = 'TOGGLE_QUEUED_LIST'
 
 export const GET_TOKEN = 'GET_TOKEN'
+export const UPDATE_TOKEN = 'UPDATE_TOKEN'
+export const AUTH_FAILED = 'AUTH_FAILED'
 
 const makeActionCreator = (type, ...argNames) => (
   (...args) => {
@@ -33,6 +35,8 @@ export const toggleUploadedList = makeActionCreator(TOGGLE_UPLOADED_LIST)
 export const toggleFailedList = makeActionCreator(TOGGLE_FAILED_LIST)
 export const toggleQueuedList = makeActionCreator(TOGGLE_QUEUED_LIST)
 export const getToken = makeActionCreator(GET_TOKEN, 'email', 'password')
+export const updateToken = makeActionCreator(UPDATE_TOKEN, 'token')
+export const authFailed = makeActionCreator(AUTH_FAILED)
 
 let nextFileId = 0;
 export const uploadFile = (file) => (
