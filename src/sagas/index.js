@@ -159,6 +159,7 @@ function* handleNotify(action) {
             'You need to be logged in to access that page. Sign in and then try again.',
             'warning',
         ))
+        return
     default:
         // do nothing
     }

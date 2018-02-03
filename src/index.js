@@ -16,6 +16,7 @@ import Login from './auth/Login.js'
 import Signup from './auth/Signup.js'
 import Uploader from './uploader'
 import Notifications from './notifications/Notifications.js'
+import Menu from './menu/Menu.js'
 import defaultSaga from './sagas'
 
 const initialState = {
@@ -60,7 +61,8 @@ saga.run(defaultSaga)
 const App = () => (
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <div style={{height: '100%'}}>
+            <div style={{height: '100%', paddingTop: '50px'}}>
+                <Menu/>
                 <Notifications/>
                 <Route path='/upload' component={Uploader}/>
                 <Route path='/login' component={Login}/>

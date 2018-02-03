@@ -5,10 +5,10 @@ import { closeNotification } from '../actions'
 
 const messagesStyle = {
     position: 'fixed',
-    top: '0',
+    bottom: '0',
     right: '0',
     paddingRight: '30px',
-    paddingTop: '30px',
+    paddingBottom: '30px',
     width: '30%',
     zIndex: 10,
 }
