@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import UploaderComponent from './UploaderComponent.js'
 import {
+    addFile,
     uploadFile,
-    retryUploadFile,
     toggleUploadedList,
     toggleFailedList,
     toggleQueuedList,
@@ -16,8 +16,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    onFileAdd: (file) => dispatch(uploadFile(file)),
-    onFileRetry: (file) => dispatch(retryUploadFile(file.id, file.data)),
+    onFileAdd: (file) => dispatch(addFile(file)),
+    onFileRetry: (file) => dispatch(uploadFile(file.id)),
     uploadedListToggle: () => dispatch(toggleUploadedList()),
     failedListToggle: () => dispatch(toggleFailedList()),
     inProgressListToggle: () => dispatch(toggleQueuedList()),

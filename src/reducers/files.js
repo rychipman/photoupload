@@ -1,14 +1,14 @@
 import { createReducer, updateArrayVals } from './util'
 import {
+    ADD_FILE,
     UPLOAD_FILE,
-    FILE_UPLOADED,
-    FILE_UPLOADING,
-    FILE_UPLOAD_FAILED,
+    UPLOAD_FILE_FAILED,
+    UPLOAD_FILE_SUCCESSFUL,
 } from '../actions';
 
 const filesReducer = createReducer({
 
-    [UPLOAD_FILE]: (state, action) => (
+    [ADD_FILE]: (state, action) => (
         [
             {
                 id: action.id,
@@ -23,26 +23,28 @@ const filesReducer = createReducer({
         ]
     ),
 
-    [FILE_UPLOADED]: (state, action) => (
+    [UPLOAD_FILE]: (state, action) => (
         updateArrayVals(state, action.id, {
-            uri: 'http://localhost:8080/img/' + action.hash,
-            uploaded: true,
-            uploading: false,
+            uri: '',
             failed: false,
-        })
-    ),
-
-    [FILE_UPLOADING]: (state, action) => (
-        updateArrayVals(state, action.id, {
+            uploaded: false,
             uploading: true,
-            failed: false,
         })
     ),
 
-    [FILE_UPLOAD_FAILED]: (state, action) => (
+    [UPLOAD_FILE_FAILED]: (state, action) => (
         updateArrayVals(state, action.id, {
             failed: true,
             uploading: false,
+            uploaded: false,
+        })
+    ),
+
+    [UPLOAD_FILE_SUCCESSFUL]: (state, action) => (
+        updateArrayVals(state, action.id, {
+            uploaded: true,
+            uploading: false,
+            failed: false,
         })
     ),
 
